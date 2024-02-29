@@ -22,7 +22,7 @@ CREATE TABLE products (
     description TEXT,
     image_url VARCHAR(255) NOT NULL,
     category category_enum NOT NULL,
-    date_add TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    date_add TIMESTAMP NOT NULL,
     CONSTRAINT fk_products_users
         FOREIGN KEY(id_user) 
         REFERENCES users(id_user)
