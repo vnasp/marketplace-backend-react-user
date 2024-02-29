@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import loginRoutes from './routes/loginRoutes.js';
-import usersRoutes from './routes/usersRoutes.js';
-import {errorController} from './src/controllers/errorController.js';
+import loginRoutes from './config/routes/loginRoutes.js';
+import usersRoutes from './config/routes/usersRoutes.js';
+import {errorController} from './src/api/v1/controllers/errorController.js';
 import 'dotenv/config';
 
 const PORT = process.env.PORT || 3000;
