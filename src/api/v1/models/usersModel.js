@@ -1,6 +1,24 @@
-import pool from "../../database/connection.js";
+import pool from "../../../../config/database/connection.js";
 import bcript from "bcryptjs";
 
+/*
+request
+id_user | email
+
+response
+{
+  "firstname": "Amanda",
+  "lastname": "Fuentes",
+  "email": "amanda.fuentes@example.com",
+  "password": "password",
+  "address": "Avenida del Sol 1258",
+  "phone": "56912345678",
+  "avatar": "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
+  "id_user_google": 1,
+  "date_add": "2024-02-14T16:00:00.000Z",
+  "date_upd": "2024-02-14T16:00:00.000Z"
+}
+ */
 const getUser = async ({ email }) => {
     if (!email) {
         throw new Error("Email is required");
@@ -41,6 +59,37 @@ const getUsers = async ({ email }) => {
     }
 };
 
+/*
+request
+{
+  "user": {
+    "firstname": "Amanda",
+    "lastname": "Fuentes",
+    "email": "amanda.fuentes@example.com",
+    "password": "password",
+    "address": "Avenida del Sol 1258",
+    "phone": "56912345678",
+    "avatar": "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
+    "id_user_google": 1,
+    "date_add": "2024-02-14T16:00:00.000Z",
+    "date_upd": "2024-02-14T16:00:00.000Z"
+  }
+}
+
+response
+{
+  "firstname": "Amanda",
+  "lastname": "Fuentes",
+  "email": "amanda.fuentes@example.com",
+  "password": "password",
+  "address": "Avenida del Sol 1258",
+  "phone": "56912345678",
+  "avatar": "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
+  "id_user_google": 1,
+  "date_add": "2024-02-14T16:00:00.000Z",
+  "date_upd": "2024-02-14T16:00:00.000Z"
+}
+*/
 const createUser = async ({ email, password }) => {
     if (!email || !password) {
         throw new Error("Required parameters are missing");
@@ -59,5 +108,26 @@ const createUser = async ({ email, password }) => {
         throw new Error(error.message);
     }
 };
+
+/*
+::editUser()
+
+request
+id_user
+
+response
+{
+  "firstname": "Amanda",
+  "lastname": "Fuentes",
+  "email": "amanda.fuentes@example.com",
+  "password": "password",
+  "address": "Avenida del Sol 1258",
+  "phone": "56912345678",
+  "avatar": "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
+  "id_user_google": 1,
+  "date_add": "2024-02-14T16:00:00.000Z",
+  "date_upd": "2024-02-14T16:00:00.000Z"
+}
+*/
 
 export const usersModel = { getUser, getUsers, createUser };
