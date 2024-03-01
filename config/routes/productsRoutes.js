@@ -125,7 +125,7 @@ const productCreationValidation = [
  */
 
 // Creación de producto - privado
-router.post('/products', auth.checkAuthentication, productCreationValidation, handleValidationErrors, productsController.createProduct);
+router.post('/products', productCreationValidation, handleValidationErrors, productsController.createProduct);
 
 /**
  * @swagger
