@@ -30,4 +30,7 @@ const getUser = async(req, res) => {
     }
 };
 
-export const usersController = { getUser, createUser };
+const updateUser = async(req,res) => {}
+
+
+export const usersController = { getUser, createUser, updateUser };
