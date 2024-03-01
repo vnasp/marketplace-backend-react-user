@@ -5,7 +5,7 @@ import {usersController} from '../../src/api/v1/controllers/usersController.js';
 const router = express.Router();
 
 /**
- *@swagger
+ * @swagger
  *  tags:
  *    name: Users
  *    description: Users API management
@@ -187,7 +187,7 @@ router.get('/users/:id_user', auth.checkAuthentication, usersController.getUser)
  *     security:
  *       - BearerAuth: []
  *     summary: Update user information.
- *     description: Updates a user's information. Note: The `email` field cannot be updated via this operation.
+ *     description: Updates a user's information. The `email` field cannot be updated via this operation.
  *     tags: [Users]
  *     parameters:
  *       - name: id
@@ -228,6 +228,6 @@ router.get('/users/:id_user', auth.checkAuthentication, usersController.getUser)
  *         description: Not Found. The requested user could not be found in the system.
  */
 
-router.put('/users/:id_user', auth.checkAuthentication, usersController.updateUser);
+router.put('/users/:id_user', auth.checkAuthentication, usersController.editUser);
 
 export default router;
