@@ -44,7 +44,7 @@ router.get('/products', productsController.getProducts);
 router.get('/products/:id', productIdValidation, handleValidationErrors, productsController.getProduct);
 
 // Creación de producto - privado
-router.post('/products', auth.checkAuthentication, productCreationValidation, handleValidationErrors, productsController.createProduct);
+router.post('/products', productCreationValidation, handleValidationErrors, productsController.createProduct);
 
 // Eliminar un producto por su ID - privado
 router.delete('/products/:id', auth.checkAuthentication, productIdValidation, handleValidationErrors, productsController.deleteProduct);

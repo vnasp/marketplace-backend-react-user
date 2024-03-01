@@ -18,7 +18,7 @@ app.use(cors());
 app.use(logger());
 app.use("/api/v1", loginRoutes);
 app.use("/api/v1", usersRoutes);
-app.use("api/v1", productsRoutes)
+app.use("/api/v1", productsRoutes)
 app.use("*", errorController.error404);
 
 app.listen(PORT, () => {
