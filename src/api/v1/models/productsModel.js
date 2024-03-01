@@ -1,3 +1,28 @@
+import pool from "../../../../config/database/connection.js";
+
+const getProductsDB = async () => {
+    const { rows } = await pool.query('SELECT * FROM products');
+    return rows;
+};
+
+const getProductDB = async (id) => {
+    const { rows } = await pool.query('SELECT * FROM products WHERE id_product = $1', [id]);
+    return rows[0];
+};
+
+const createProductDB = async (product) => {
+    const { id_user, name, price, description, image_url, category } = product;
+    const { rows } = await pool.query('INSERT INTO products (id_user, name, price, description, image_url, category, date_add) VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP) RETURNING *', [id_user, name, price, description, image_url, category]);
+    return rows[0];
+};
+
+const deleteProductDB = async (id) => {
+    const { rows } = await pool.query('DELETE FROM products WHERE id_product = $1 RETURNING *', [id]);
+    return rows[0];
+};
+
+export const productsModel = { getProductsDB, getProductDB, createProductDB, deleteProductDB };
+
 /*
 ::createProduct()
 

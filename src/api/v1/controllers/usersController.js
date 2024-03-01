@@ -6,31 +6,53 @@ const createUser = async(req, res) => {
         const userExists = await usersModel.getUser({ email });
 
         if (userExists) {
-            res.locals.statusText = { error: "User already exists", message: "User already exists" };
+            res.locals.statusText = { error: "User already exists" };
             return res.status(400).json(res.locals.statusText);
         }
 
         res.locals.statusText = await usersModel.createUser(req.body);
-        return res.status(200).json(res.locals.statusText);
+        return res.status(201).json(res.locals.statusText);
     } catch (error) {
-        res.locals.statusText = { error: `Error: ${error.message}`, message: `Error: ${error.message}`};
+        res.locals.statusText = { error: `${error.message}` };
         return res.status(500).json(res.locals.statusText);
     }
 };
 
 const getUser = async(req, res) => {
     try {
-        const { email } = req.auth;
-        const user = await usersModel.getUser({ email });
-        res.locals.statusText = [ user ];
+        const { id_user } = req.auth;
+
+        const user = await usersModel.getUser({ id_user });
+        res.locals.statusText = user;
         return res.status(200).json(res.locals.statusText);
     } catch (error) {
-        res.locals.statusText = { error: `Error: ${error.message}`, message: `Error: ${error.message}`};
+        res.locals.statusText = { error: `${error.message}` };
         return res.status(500).json(res.locals.statusText);
     }
 };
 
-const updateUser = async(req,res) => {}
+const editUser = async(req, res) => {
+    try {
+        const { id_user } = req.auth;
+        const { email } = req.body;
 
+        if (email && await usersModel.getUser({ email, id_user_diff : id_user })) {
+            res.locals.statusText = { error: "Email is already in use." };
+            return res.status(400).json(res.locals.statusText);
+        }
 
-export const usersController = { getUser, createUser, updateUser };
+        const editUser = await usersModel.editUser({...req.body, id_user, date_upd: "CURRENT_TIMESTAMP" });
+
+        if (!editUser) {
+            res.locals.statusText = { error: `User could not be updated.` };
+            return res.status(500).json(res.locals.statusText);
+        }
+
+        return res.status(200).json(editUser);
+    } catch (error) {
+        res.locals.statusText = { error: `${error.message}` };
+        return res.status(500).json(res.locals.statusText);
+    }
+};
+
+export const usersController = { getUser, createUser, editUser };
