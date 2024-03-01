@@ -68,3 +68,23 @@ CREATE TABLE orders_details (
         ON DELETE CASCADE,
     PRIMARY KEY (id_order, id_product)
 );
+
+INSERT INTO users (
+    id_user,
+    firstname, lastname,
+    email, password,
+    address, phone,
+    avatar_url,
+    id_user_google,
+    date_add, date_upd)
+VALUES (
+    1,
+    'Jennifer', 'López',
+    'jlo@mimarketlatino.com', '$2a$10$DNYPeD41MsTKRkbe3zZtA.Nzd0SPokboIqyXmImlp8U9uqMwTV91G', /*1234*/
+    'Los Ángeles, California', '1234567890',
+    'https://media.tenor.com/5fZ3ujIk8WkAAAAe/jlo-mi.png',
+    NULL,
+    CURRENT_TIMESTAMP AT TIME ZONE 'UTC',
+    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
+);
+

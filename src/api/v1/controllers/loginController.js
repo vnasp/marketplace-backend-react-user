@@ -4,20 +4,25 @@ import {usersModel} from '../models/usersModel.js';
 
 const login = async(req, res) => {
     try {
-        const { email } = req.body;
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            throw new Error("Required parameters are missing.");
+        }
+    
         const user = await usersModel.getUser({ email });
 
         if (!user) {
-            //res.locals.statusText = { error: "User or password is invalid", message: "User or password is invalid"};
-            res.locals.statusText = { error: "User not found", message: "User not found"};
+            res.locals.statusText = { error: "Email and/or password is invalid" };
+            //res.locals.statusText = { error: "User not found" };
             return res.status(400).json(res.locals.statusText);
         }
       
-        const passwordMatch = bcript.compareSync(req.body.password, user.password);
+        const passwordMatch = bcript.compareSync(password, user.password);
 
         if (!passwordMatch) {
-            //res.locals.statusText = { error: "User or password is invalid", message: "User or password is invalid"};
-            res.locals.statusText = { error: "Password is incorrect", message: "Password is incorrect"};
+            res.locals.statusText = { error: "Email and/or password is invalid" };
+            //res.locals.statusText = { error: "Password is incorrect" };
             return res.status(400).json(res.locals.statusText);
         }
 
@@ -25,20 +30,17 @@ const login = async(req, res) => {
         const expirationDate = new Date(Date.now() + expiresIn * 1000).toISOString().slice(0, 19).replace('T', ' ');
 
         const token = jwt.sign({
-            email : user.email,
-            id    : user.user_id,
+            id_user : user.id_user,
         }, process.env.JWT_SECRET || "az_AZ", { expiresIn: expiresIn });
     
         res.locals.statusText = {
-            message : "Login successfully",
-            email   : user.email,
             token,
             expiresIn,
             expirationDate
         };
         return res.status(200).json(res.locals.statusText);
     } catch (error) {
-        res.locals.statusText = { error: `Error: ${error.message}`, message: `Error: ${error.message}`};
+        res.locals.statusText = { error: `${error.message}` };
         return res.status(500).json(res.locals.statusText);
     }
 };

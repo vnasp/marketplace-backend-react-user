@@ -103,6 +103,7 @@ const router = express.Router();
  */
 
 router.post('/users', usersController.createUser);
+router.put('/users/:id_user', auth.checkAuthentication, usersController.editUser);
 router.get('/users', auth.checkAuthentication, usersController.getUser);
 
 export default router;
