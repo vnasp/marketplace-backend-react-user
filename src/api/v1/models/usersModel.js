@@ -231,7 +231,7 @@ const editUser = async ({
             set.push(`date_upd = CURRENT_TIMESTAMP AT TIME ZONE 'UTC'`);
         }
         
-        if (!set.length || !set.where) {
+        if (!set.length || !where.length) {
             throw new Error("Required parameters are missing.");
         }
 
