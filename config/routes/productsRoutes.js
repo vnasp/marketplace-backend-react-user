@@ -1,5 +1,6 @@
 import express from 'express';
 import { body, param, validationResult } from 'express-validator';
+import { createProduct, deleteProduct, getProduct, getProducts } from '../controllers/productsController.js';
 
 const router = express.Router();
 
