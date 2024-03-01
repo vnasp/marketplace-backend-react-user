@@ -187,7 +187,7 @@ router.get('/users/:id_user', auth.checkAuthentication, usersController.getUser)
  *     security:
  *       - BearerAuth: []
  *     summary: Update user information.
- *     description: Updates a user's information. The `email` field cannot be updated via this operation.
+ *     description: Updates a user's information. The email field cannot be updated via this operation.
  *     tags: [Users]
  *     parameters:
  *       - name: id
