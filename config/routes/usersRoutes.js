@@ -5,15 +5,20 @@ import {usersController} from '../../src/api/v1/controllers/usersController.js';
 const router = express.Router();
 
 /**
- * @swagger
- * tags:
- *   name: Users
- *   description: Users API management
+ *@swagger
+ *  tags:
+ *    name: Users
+ *    description: Users API management
  */
 
 /**
  * @swagger
  * components:
+ *   securitySchemes:
+ *     BearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  *   schemas:
  *     UserCreation:
  *       type: object
@@ -38,13 +43,13 @@ const router = express.Router();
  *           minLength: 8
  *           description: User password, which must be at least 8 characters long and will be securely hashed before storage.
  *       example:
- *        firstname: John
- *        lastname: Doe
- *        email: john.doe@test.com
- *        password: password
+ *         firstname: John
+ *         lastname: Doe
+ *         email: john.doe@test.com
+ *         password: password
  *     UserResponse:
  *       type: object
- *       description: >-  Represents the user information that is safe to be exposed publicly. This schema is used for responses where user details are fetched without including sensitive data like passwords.
+ *       description: Represents the user information that is safe to be exposed publicly. This schema is used for responses where user details are fetched without including sensitive data like passwords.
  *       properties:
  *         id_user:
  *           type: integer
@@ -68,7 +73,7 @@ const router = express.Router();
  *         avatar_url:
  *           type: string
  *           description: User avatar
- *         sign_in_google:
+ *         id_user_google:
  *           type: boolean
  *           description: User Login Status with Google
  *         date_add:
@@ -81,7 +86,7 @@ const router = express.Router();
  *           description: User update date
  *     UserEditable:
  *       type: object
- *       description: >-  Represents the user information that can be editable.
+ *       description: Represents the user information that can be editable.
  *       properties:
  *         firstname:
  *           type: string
@@ -102,7 +107,7 @@ const router = express.Router();
  *         avatar_url:
  *           type: string
  *           description: User avatar
- *         sign_in_google:
+ *         id_user_google:
  *           type: boolean
  *           description: User Login Status with Google
  */
