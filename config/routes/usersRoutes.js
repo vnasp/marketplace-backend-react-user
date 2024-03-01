@@ -178,7 +178,7 @@ router.post('/users', usersController.createUser);
  *         description: Not Found. The requested user could not be found in the system.
  */
 
-router.get('/users/:id', auth.checkAuthentication, usersController.getUser);
+router.get('/users/:id_user', auth.checkAuthentication, usersController.getUser);
 
 /**
  * @swagger
@@ -228,6 +228,6 @@ router.get('/users/:id', auth.checkAuthentication, usersController.getUser);
  *         description: Not Found. The requested user could not be found in the system.
  */
 
-router.put('/users/:id', auth.checkAuthentication, usersController.updateUser);
+router.put('/users/:id_user', auth.checkAuthentication, usersController.updateUser);
 
 export default router;
