@@ -51,9 +51,6 @@ const router = express.Router();
  *       type: object
  *       description: Represents the user information that is safe to be exposed publicly. This schema is used for responses where user details are fetched without including sensitive data like passwords.
  *       properties:
- *         id_user:
- *           type: integer
- *           description: User's ID
  *         firstname:
  *           type: string
  *           description: User firstname
@@ -74,8 +71,8 @@ const router = express.Router();
  *           type: string
  *           description: User avatar
  *         id_user_google:
- *           type: boolean
- *           description: User Login Status with Google
+ *           type: string
+ *           description: ID provided by Google
  *         date_add:
  *           type: string
  *           format: date-time
@@ -107,9 +104,6 @@ const router = express.Router();
  *         avatar_url:
  *           type: string
  *           description: User avatar
- *         id_user_google:
- *           type: boolean
- *           description: User Login Status with Google
  */
 
 /**
@@ -135,10 +129,7 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *              type: object
- *              properties:
- *                user:
- *                  $ref: '#/components/schemas/UserResponse'
+ *              $ref: '#/components/schemas/UserResponse'
  *       '400':
  *         description: Bad Request. The request was invalid or can't be served due to bad syntax.
  *       '409':
@@ -149,14 +140,14 @@ router.post('/users', usersController.createUser);
 
 /**
  * @swagger
- * /users/{id}:
+ * /users/{id_user}:
  *   get:
  *     security:
  *       - BearerAuth: []
  *     summary: Get user information
  *     tags: [Users]
  *     parameters:
- *       - name: id
+ *       - name: id_user
  *         in: path
  *         description: User id
  *         required: true
@@ -168,10 +159,7 @@ router.post('/users', usersController.createUser);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/UserResponse'
+ *               $ref: '#/components/schemas/UserResponse'
  *       '400':
  *         description: Bad Request. The request was invalid or can't be served due to bad syntax.
  *       '404':
@@ -182,15 +170,15 @@ router.get('/users/:id_user', auth.checkAuthentication, usersController.getUser)
 
 /**
  * @swagger
- * /users/{id}:
+ * /users/{id_user}:
  *   put:
  *     security:
  *       - BearerAuth: []
  *     summary: Update user information.
- *     description: Updates a user's information. The email field cannot be updated via this operation.
+ *     description: Updates a user's information.
  *     tags: [Users]
  *     parameters:
- *       - name: id
+ *       - name: id_user
  *         in: path
  *         description: User id to be updated
  *         required: true
@@ -207,19 +195,16 @@ router.get('/users/:id_user', auth.checkAuthentication, usersController.getUser)
  *             lastname: Doe
  *             password: newpassword
  *             phone: 569123456789
- *             address: 123 Main St
+ *             address: Calle Principal 123
  *             avatar_url: http://example.com/avatar.jpg
- *             sign_in_google: false
+ *             id_user_google: 32877832
  *     responses:
  *       '200':
  *         description: Success. The request has successfully edited the user information.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/UserResponse'
+ *              $ref: '#/components/schemas/UserResponse'
  *       '400':
  *         description: Bad Request. The request was invalid or can't be served due to bad syntax.
  *       '401':
