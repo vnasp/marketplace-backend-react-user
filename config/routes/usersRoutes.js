@@ -61,12 +61,12 @@ const router = express.Router();
  *           type: string
  *           format: email
  *           description: User email
- *         address:
- *           type: string
- *           description: User address
  *         phone:
  *           type: string
  *           description: User phone
+ *         address:
+ *           type: string
+ *           description: User address
  *         avatar_url:
  *           type: string
  *           description: User avatar
@@ -81,29 +81,47 @@ const router = express.Router();
  *           type: string
  *           format: date-time
  *           description: User update date
- *     UserEditable:
+ *       example:
+ *         firstname: John
+ *         lastname: Doe
+ *         email: john.doe@test.com
+ *         phone: 569123456789
+ *         address: Calle Principal 123
+ *         avatar_url: http://example.com/avatar.jpg
+ *         date_add: "2023-01-01T00:00:00Z"
+ *         date_upd: "2023-01-02T00:00:00Z"
+ *     UserEdition:
  *       type: object
  *       description: Represents the user information that can be editable.
  *       properties:
  *         firstname:
  *           type: string
- *           description: User firstname
+ *           minLength: 1
+ *           description: User firstname. This field is required and can't be blank on an update.
  *         lastname:
  *           type: string
- *           description: User lastname
+ *           minLength: 1
+ *           description: User lastname. This field is required and can't be blank on an update.
  *         password:
  *           type: string
  *           minLength: 8
  *           description: User password, which must be at least 8 characters long and will be securely hashed before storage.
  *         address:
  *           type: string
- *           description: User address
+ *           description: User address. Optional for updates.
  *         phone:
  *           type: string
- *           description: User phone
+ *           description: User phone. Optional for updates.
  *         avatar_url:
  *           type: string
- *           description: User avatar
+ *           description: User avatar. Optional for updates.
+ *       example:
+ *         firstname: John
+ *         lastname: Doe
+ *         password: newSecurePassword123
+ *         phone: 569123456789
+ *         address: Calle Principal 567
+ *         avatar_url: http://example.com/new-avatar.jpg
  */
 
 /**
@@ -130,6 +148,15 @@ const router = express.Router();
  *           application/json:
  *             schema:
  *              $ref: '#/components/schemas/UserResponse'
+ *             example:
+ *              firstname: John
+ *              lastname: Doe
+ *              email: john.doe@test.com
+ *              phone: 569123456789
+ *              address: Calle Principal 123
+ *              avatar_url: http://example.com/avatar.jpg
+ *              date_add: "2023-01-01T00:00:00Z"
+ *              date_upd: "2023-01-02T00:00:00Z"
  *       '400':
  *         description: Bad Request. The request was invalid or can't be served due to bad syntax.
  *       '409':
@@ -160,6 +187,15 @@ router.post('/users', usersController.createUser);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UserResponse'
+ *             example:
+ *               firstname: John
+ *               lastname: Doe
+ *               email: john.doe@test.com
+ *               phone: 569123456789
+ *               address: Calle Principal 123
+ *               avatar_url: http://example.com/avatar.jpg
+ *               date_add: "2023-01-01T00:00:00Z"
+ *               date_upd: "2023-01-02T00:00:00Z"
  *       '400':
  *         description: Bad Request. The request was invalid or can't be served due to bad syntax.
  *       '404':
@@ -189,15 +225,14 @@ router.get('/users/:id_user', auth.checkAuthentication, usersController.getUser)
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UserEditable'
+ *             $ref: '#/components/schemas/UserEdition'
  *           example:
  *             firstname: John
  *             lastname: Doe
- *             password: newpassword
+ *             password: newSecurePassword123
  *             phone: 569123456789
- *             address: Calle Principal 123
- *             avatar_url: http://example.com/avatar.jpg
- *             id_user_google: 32877832
+ *             address: Calle Principal 567
+ *             avatar_url: "http://example.com/new-avatar.jpg"
  *     responses:
  *       '200':
  *         description: Success. The request has successfully edited the user information.
@@ -205,6 +240,12 @@ router.get('/users/:id_user', auth.checkAuthentication, usersController.getUser)
  *           application/json:
  *             schema:
  *              $ref: '#/components/schemas/UserResponse'
+ *             example:
+ *              firstname: John
+ *              lastname: Doe
+ *              phone: 569123456789
+ *              address: Calle Principal 567
+ *              avatar_url: http://example.com/new-avatar.jpg
  *       '400':
  *         description: Bad Request. The request was invalid or can't be served due to bad syntax.
  *       '401':
