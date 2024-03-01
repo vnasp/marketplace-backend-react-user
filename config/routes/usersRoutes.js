@@ -15,13 +15,36 @@ const router = express.Router();
  * @swagger
  * components:
  *   schemas:
- *     Users:
+ *     UserCreation:
  *       type: object
  *       required:
  *         - email
  *         - firstname
  *         - lastname
  *         - password
+ *       properties:
+ *         firstname:
+ *           type: string
+ *           description: User firstname
+ *         lastname:
+ *           type: string
+ *           description: User lastname
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: User email
+ *         password:
+ *           type: string
+ *           minLength: 8
+ *           description: User password, which must be at least 8 characters long and will be securely hashed before storage.
+ *       example:
+ *        firstname: John
+ *        lastname: Doe
+ *        email: john.doe@test.com
+ *        password: password
+ *     UserResponse:
+ *       type: object
+ *       description: >-  Represents the user information that is safe to be exposed publicly. This schema is used for responses where user details are fetched without including sensitive data like passwords.
  *       properties:
  *         id_user:
  *           type: integer
@@ -34,10 +57,8 @@ const router = express.Router();
  *           description: User lastname
  *         email:
  *           type: string
+ *           format: email
  *           description: User email
- *         password:
- *           type: string
- *           description: User password
  *         address:
  *           type: string
  *           description: User address
@@ -48,27 +69,42 @@ const router = express.Router();
  *           type: string
  *           description: User avatar
  *         sign_in_google:
- *           type: string
+ *           type: boolean
  *           description: User Login Status with Google
  *         date_add:
  *           type: string
+ *           format: date-time
  *           description: User creation date
  *         date_upd:
  *           type: string
+ *           format: date-time
  *           description: User update date
- *
- *       example:
- *        id_user: 1,
- *        firstname: Amanda
- *        lastname: Fuentes
- *        email: amanda.fuentes@test.com
- *        password: 1234
- *        address: Avenida del Sol 1258
- *        phone: 56912345678
- *        avatar_url: https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg
- *        sign_in_google: false
- *        date_add: 2024-02-29T16:00:00.000Z
- *        date_upd: 2024-02-29T16:00:00.000Z
+ *     UserEditable:
+ *       type: object
+ *       description: >-  Represents the user information that can be editable.
+ *       properties:
+ *         firstname:
+ *           type: string
+ *           description: User firstname
+ *         lastname:
+ *           type: string
+ *           description: User lastname
+ *         password:
+ *           type: string
+ *           minLength: 8
+ *           description: User password, which must be at least 8 characters long and will be securely hashed before storage.
+ *         address:
+ *           type: string
+ *           description: User address
+ *         phone:
+ *           type: string
+ *           description: User phone
+ *         avatar_url:
+ *           type: string
+ *           description: User avatar
+ *         sign_in_google:
+ *           type: boolean
+ *           description: User Login Status with Google
  */
 
 /**
@@ -82,10 +118,12 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               user:
- *                 $ref: '#/components/schemas/Users'
+ *              $ref: '#/components/schemas/UserCreation'
+ *           example:
+ *             firstname: John
+ *             lastname: Doe
+ *             email: john.doe@test.com
+ *             password: password
  *     responses:
  *       '201':
  *         description: Success. The request has led to the creation of a new user.
@@ -95,15 +133,96 @@ const router = express.Router();
  *              type: object
  *              properties:
  *                user:
- *                  $ref: '#/components/schemas/Users'
+ *                  $ref: '#/components/schemas/UserResponse'
  *       '400':
- *         description: The request was invalid or can't be served due to bad syntax. Check the request format and parameters.
+ *         description: Bad Request. The request was invalid or can't be served due to bad syntax.
  *       '409':
- *         description: The request conflicts with the current state of the server, such as duplicate entries.
+ *         description: Conflict. The request conflicts with the current state of the server, such as duplicate entries.
  */
 
 router.post('/users', usersController.createUser);
-router.put('/users/:id_user', auth.checkAuthentication, usersController.editUser);
-router.get('/users', auth.checkAuthentication, usersController.getUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Get user information
+ *     tags: [Users]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: User id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Success. The request has successfully loaded the user information.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/UserResponse'
+ *       '400':
+ *         description: Bad Request. The request was invalid or can't be served due to bad syntax.
+ *       '404':
+ *         description: Not Found. The requested user could not be found in the system.
+ */
+
+router.get('/users/:id_user', auth.checkAuthentication, usersController.getUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Update user information.
+ *     description: Updates a user's information. Note: The `email` field cannot be updated via this operation.
+ *     tags: [Users]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: User id to be updated
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserEditable'
+ *           example:
+ *             firstname: John
+ *             lastname: Doe
+ *             password: newpassword
+ *             phone: 569123456789
+ *             address: 123 Main St
+ *             avatar_url: http://example.com/avatar.jpg
+ *             sign_in_google: false
+ *     responses:
+ *       '200':
+ *         description: Success. The request has successfully edited the user information.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/UserResponse'
+ *       '400':
+ *         description: Bad Request. The request was invalid or can't be served due to bad syntax.
+ *       '401':
+ *         description: Unauthorized. The request lacks valid authentication credentials for the target resource.  
+ *       '404':
+ *         description: Not Found. The requested user could not be found in the system.
+ */
+
+router.put('/users/:id_user', auth.checkAuthentication, usersController.updateUser);
 
 export default router;
