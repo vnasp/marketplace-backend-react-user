@@ -7,7 +7,7 @@ const options = {
     info: {
       title: "Mi Market Latino API",
       version: "1.0.0",
-      description: "API para el manejo de usuarios, productos y órdenes",
+      description: "API para el manejo de usuarios, productos y órdenes.",
     },
     servers: [
       {
