@@ -11,7 +11,6 @@ const router = express.Router();
  *    description: Orders API management
  *  security:
  *    BearerAuth: []
-
 */
 
 /**
@@ -144,13 +143,13 @@ router.post('/orders', auth.checkAuthentication, ordersController.createOrder);
  *     tags: [Orders]
  *     responses:
  *       '200':
- *         description: Success. The request has successfully loaded the orders's user.
+ *         description: Success. The request has successfully loaded the orders for the authenticated user.
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/OrderResponse'
+ *                 $ref: '#/components/schemas/OrderListResponse'
  *             example:
  *               - id_order: 1
  *                 id_user: 2
