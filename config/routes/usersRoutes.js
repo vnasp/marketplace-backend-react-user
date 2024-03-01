@@ -23,9 +23,9 @@ const router = express.Router();
  *     UserCreation:
  *       type: object
  *       required:
- *         - email
  *         - firstname
  *         - lastname
+ *         - email
  *         - password
  *       properties:
  *         firstname:
