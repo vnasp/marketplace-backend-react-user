@@ -2,7 +2,7 @@ import express from 'express';
 import { body, param, validationResult } from 'express-validator';
 
 // Controladores
-import { createProduct, deleteProduct, getProduct, getProducts } from '../../src/api/v1/controllers/productsController.js';
+import { productsController } from '../../src/api/v1/controllers/productsController.js';
 
 // Middlewares
 import { auth } from "../../middlewares/auth.js";
@@ -38,15 +38,15 @@ const productCreationValidation = [
 // RUTAS
 
 // Obtener todos los productos - público
-router.get('/products', getProducts);
+router.get('/products', productsController.getProducts);
 
 // Obtener el detalle del producto por su ID - público
-router.get('/products/:id', productIdValidation, handleValidationErrors, getProduct);
+router.get('/products/:id', productIdValidation, handleValidationErrors, productsController.getProduct);
 
 // Creación de producto - privado
-router.post('/products', auth.checkAuthentication, productCreationValidation, handleValidationErrors, createProduct);
+router.post('/products', auth.checkAuthentication, productCreationValidation, handleValidationErrors, productsController.createProduct);
 
 // Eliminar un producto por su ID - privado
-router.delete('/products/:id', auth.checkAuthentication, productIdValidation, handleValidationErrors, deleteProduct);
+router.delete('/products/:id', auth.checkAuthentication, productIdValidation, handleValidationErrors, productsController.deleteProduct);
 
 export default router;

@@ -1,9 +1,9 @@
-// importar el modelo
+import { productsModel } from "../models/productsModel.js";
 
 const getProducts = async (req, res) => {
     try {
-        // Aquí iría la lógica para obtener todos los productos de la base de datos
-        res.json({ message: "Todos los productos obtenidos con éxito."});
+        const products = await productsModel.getProductsDB();
+        res.json(products);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -12,8 +12,11 @@ const getProducts = async (req, res) => {
 const getProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        // Aquí iría la lógica para obtener un producto específico por su id
-        res.json({ message: `Producto ${id} obtenido con éxito.` });
+        const product = await productsModel.getProductDB(id);
+        if (!product) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+        res.json(product);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -21,9 +24,8 @@ const getProduct = async (req, res) => {
 
 const createProduct = async (req, res) => {
     try {
-        const { body } = req;
-        // Aquí iría la lógica para crear un nuevo producto con la información en `body`
-        res.status(201).json({ message: "Producto creado con éxito.", product: body });
+        const product = await productsModel.createProductDB(req.body);
+        res.status(201).json(product);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -32,8 +34,11 @@ const createProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        // Aquí iría la lógica para eliminar un producto por su id
-        res.json({ message: `Producto ${id} eliminado con éxito.` });
+        const deletedProduct = await productsModel.deleteProductDB(id);
+        if (!deletedProduct) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+        res.json({ message: 'Producto eliminado con éxito', product: deletedProduct });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
