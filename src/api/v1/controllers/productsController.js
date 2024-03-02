@@ -24,7 +24,13 @@ const getProduct = async (req, res) => {
 
 const createProduct = async (req, res) => {
     try {
-        const product = await productsModel.createProductDB(req.body);
+        // Obtiene id_user desde el JWT decodificado
+        const id_user = req.auth.id_user;
+
+        // Incluye id_user en el objeto del producto a crear
+        const productData = { ...req.body, id_user }; // Agrega el id_user extraído del token a los datos del producto
+
+        const product = await productsModel.createProductDB(productData);
         res.status(201).json(product);
     } catch (error) {
         res.status(500).json({ error: error.message });
