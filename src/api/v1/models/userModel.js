@@ -252,4 +252,4 @@ const editUser = async ({
     }
 };
 
-export const usersModel = { getUser, getUsers, createUser, editUser };
+export const userModel = { getUser, getUsers, createUser, editUser };

@@ -1,16 +1,16 @@
-import {usersModel} from '../models/usersModel.js';
+import {userModel} from '../models/userModel.js';
 
 const createUser = async(req, res) => {
     try {
         const { email } = req.body;
-        const userExists = await usersModel.getUser({ email });
+        const userExists = await userModel.getUser({ email });
 
         if (userExists) {
             res.locals.statusText = { error: "User already exists" };
             return res.status(400).json(res.locals.statusText);
         }
 
-        res.locals.statusText = await usersModel.createUser(req.body);
+        res.locals.statusText = await userModel.createUser(req.body);
         return res.status(201).json(res.locals.statusText);
     } catch (error) {
         res.locals.statusText = { error: `${error.message}` };
@@ -22,7 +22,7 @@ const getUser = async(req, res) => {
     try {
         const { id_user } = req.auth;
 
-        const user = await usersModel.getUser({ id_user });
+        const user = await userModel.getUser({ id_user });
         res.locals.statusText = user;
         return res.status(200).json(res.locals.statusText);
     } catch (error) {
@@ -36,12 +36,12 @@ const editUser = async(req, res) => {
         const { id_user } = req.auth;
         const { email } = req.body;
 
-        if (email && await usersModel.getUser({ email, id_user_diff : id_user })) {
+        if (email && await userModel.getUser({ email, id_user_diff : id_user })) {
             res.locals.statusText = { error: "Email is already in use." };
             return res.status(400).json(res.locals.statusText);
         }
 
-        const editUser = await usersModel.editUser({...req.body, id_user, date_upd: "CURRENT_TIMESTAMP" });
+        const editUser = await userModel.editUser({...req.body, id_user, date_upd: "CURRENT_TIMESTAMP" });
 
         if (!editUser) {
             res.locals.statusText = { error: `User could not be updated.` };
