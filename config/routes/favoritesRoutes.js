@@ -1,13 +1,13 @@
 import { Router } from "express";
 
 // controller
-import { updateFavorites } from '../controllers/favoritesController.js';
+import { favoritesController } from "../../src/api/v1/controllers/favoritesController.js";
 
 const router = Router();
 
 router
     .route("/favorites/:id")
-    .put(updateFavorites)
+    .put(favoritesController.updateFavorites)
     .all((req, res, next) => {
         res.status(405).json({ message: "Method not allowed" });
     });

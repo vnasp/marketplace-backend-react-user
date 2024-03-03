@@ -1,6 +1,6 @@
 import bcript from "bcryptjs";
 import jwt from "jsonwebtoken";
-import {usersModel} from '../models/usersModel.js';
+import { userModel } from '../models/userModel.js';
 
 const login = async(req, res) => {
     try {
@@ -10,7 +10,7 @@ const login = async(req, res) => {
             throw new Error("Required parameters are missing.");
         }
     
-        const user = await usersModel.getUser({ email });
+        const user = await userModel.getUser({ email });
 
         if (!user) {
             res.locals.statusText = { error: "Email and/or password is invalid" };
