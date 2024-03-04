@@ -578,6 +578,7 @@ components:
         - total_price
         - purchase_date
         - id_product
+        - unit_price
         - product_quantity
       properties:
         total_price:
@@ -590,6 +591,9 @@ components:
         id_product:
           type: integer
           description: Product ID purchased
+        unit_price:
+          type: integer
+          description: Product unitary price
         product_quantity:
           type: integer
           description: Quantity of the product purchased
@@ -597,6 +601,7 @@ components:
         total_price: 10000
         purchase_date: "2023-01-01T00:00:00Z"
         id_product: 1
+        unit_price: 5000
         product_quantity: 2
     OrderResponse:
       type: object
@@ -606,6 +611,7 @@ components:
         - total_price
         - purchase_date
         - id_product
+        - unit_price
         - product_quantity
       properties:
         id_order:
@@ -624,6 +630,9 @@ components:
         id_product:
           type: integer
           description: Product ID purchased
+        unit_price:
+          type: integer
+          description: Product unitary price
         product_quantity:
           type: integer
           description: Quantity of the product purchased
@@ -633,6 +642,7 @@ components:
         total_price: 10000
         purchase_date: "2023-01-01T00:00:00Z"
         id_product: 1
+        unit_price: 5000
         product_quantity: 2
     OrderListResponse:
       type: array
