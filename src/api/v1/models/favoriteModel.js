@@ -47,6 +47,7 @@ export const favoriteModel = { existingFavorite, addFavorite, removeFavorite };
 /*
 ::editFavorite()
 
+
 request
 {
   "favorite": {

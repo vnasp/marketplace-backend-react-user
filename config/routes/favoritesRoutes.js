@@ -6,17 +6,14 @@ import { favoritesController } from "../../src/api/v1/controllers/favoritesContr
 // auth
 import { auth } from "../../middlewares/auth.js";
 
-/* Los chiquillos importan de la siguiente maenra, para que revisen y queden todos los routes iguales 
-import express from 'express';
-const router = express.Router();
-*/
 
 const router = Router();
 
-// este put sería modificarlo por post y delete
+// post and delete
 router
     .route("/favorites/:id")
-    .put(favoritesController.updateFavorites)
+    .post(favoritesController.updateFavorites)
+    .delete(favoritesController.deleteFavorite)
     .all((req, res, next) => {
         res.status(405).json({ message: "Method not allowed" });
     });
