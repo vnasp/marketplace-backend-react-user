@@ -1,4 +1,4 @@
-import { Router } from "express";
+import express from "express";
 
 // controller
 import { favoritesController } from "../../src/api/v1/controllers/favoritesController.js";
@@ -6,26 +6,35 @@ import { favoritesController } from "../../src/api/v1/controllers/favoritesContr
 // auth
 import { auth } from "../../middlewares/auth.js";
 
+const router = express.Router();
 
-const router = Router();
-
-// post and delete
-router
-    .route("/favorites/:id")
-    .post(favoritesController.updateFavorites)
-    .delete(favoritesController.deleteFavorite)
-    .all((req, res, next) => {
-        res.status(405).json({ message: "Method not allowed" });
-    });
-
+// Routes
+// put
+router.put(
+    "/favorites",
+    auth.checkAuthentication,
+    favoritesController.updateFavorites
+);
 
 // este para agregar favoritos.El id del producto se pasa en el body
-router.post('/favorites', auth.checkAuthentication, favoritesController.addFavorite);
+router.post(
+    "/favorites",
+    auth.checkAuthentication,
+    favoritesController.addFavorite
+);
 
 // este para obtener los favoritos. El id de usuario viene del auth
-router.get('/favorites', auth.checkAuthentication, favoritesController.getFavoritesByAuthUser);
+router.get(
+    "/favorites",
+    auth.checkAuthentication,
+    favoritesController.getFavoritesByAuthUser
+);
 
 // este para borrar los favoritos. El id es del producto en el path.
-router.get('/favorites/{id}', auth.checkAuthentication, favoritesController.deleteFavorite);
+router.delete(
+    "/favorites/{id}",
+    auth.checkAuthentication,
+    favoritesController.deleteFavorite
+);
 
 export default router;
