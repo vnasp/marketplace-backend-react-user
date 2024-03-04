@@ -1,11 +1,11 @@
-import { orderModel } from "../models/orderModel.js";
+import { orderModel } from "../models/orderModel.js"
 
 const createOrder = async (req, res) => {
   try {
-    const id_user = req.auth.id_user;
+    const id_user = req.auth.id_user
     const orderData = { ...req.body, id_user }
-    const order = await orderModel.createOrderDB(orderData);
-    res.status(201).json(order);
+    const order = await orderModel.createOrderDB(orderData)
+    res.status(201).json(order)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -13,31 +13,15 @@ const createOrder = async (req, res) => {
 
 const getOrdersByAuthUser = async (req, res) => {
   try {
-    const id_user = req.auth.id_user;
-    const orders = await productModel.getUserOrders(id_user);
+    const id_user = req.auth.id_user
+    const orders = await orderModel.getUserOrders(id_user)
     if (!orders) {
-      return res.status(404).json({ message: 'Órden no encontrada' });
+      return res.status(404).json({ message: 'Órden no encontrada' })
     }
-    res.json(product);
+    res.json(orders)
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message })
   }
-};
-
-export const ordersController = { createOrder, getOrdersByAuthUser };
-
-/*
-{
-  "total_price": 10000,
-  "products": [
-    {
-      "id_product": 1,
-      "product_quantity": 2
-    },
-    {
-      "id_product": 2,
-      "product_quantity": 3
-    }
-  ]
 }
-*/
+
+export const ordersController = { createOrder, getOrdersByAuthUser }
