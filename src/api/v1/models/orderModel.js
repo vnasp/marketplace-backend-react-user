@@ -22,7 +22,7 @@ const createOrderDB = async (orderData) => {
 
   try {
     await pool.query('BEGIN')
-    // Creamos la orden y obtenemos el id_order generado
+    // Creamos la orden y obtenemos el id_order y la fecha
     const createOrder = await pool.query('INSERT INTO orders (id_user, total_price) VALUES ($1, $2) RETURNING id_order, purchase_date', [id_user, total_price]);
     const { id_order, purchase_date } = createOrder.rows[0];
 
@@ -39,12 +39,9 @@ const createOrderDB = async (orderData) => {
   }
 }
 
-
-
-
 const getUserOrders = async (id) => {
-  const { rows } = await pool.query('SELECT * FROM orders WHERE id_user = $1', [id])
-  return rows[0]
+  const { rows } = await pool.query('SELECT * FROM orders LEFT JOIN order_details ON orders.id_order = order_details.id_order WHERE id_user = $1', [id])
+  return rows
 }
 
 export const orderModel = { createOrderDB, getUserOrders }
