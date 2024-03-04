@@ -22,14 +22,13 @@ router
     });
 
 
-// el auth es el que han usado los chiquillos, de ahí obtienen el id del usuario, sin necesidad de pasar el id en la URL
-// este para agregar favoritos
+// este para agregar favoritos.El id del producto se pasa en el body
 router.post('/favorites', auth.checkAuthentication, favoritesController.addFavorite);
 
-// este para obtener los favoritos
+// este para obtener los favoritos. El id de usuario viene del auth
 router.get('/favorites', auth.checkAuthentication, favoritesController.getFavoritesByAuthUser);
 
-// este para borrar los favoritos
-router.get('/favorites', auth.checkAuthentication, favoritesController.deleteFavorite);
+// este para borrar los favoritos. El id es del producto en el path.
+router.get('/favorites/{id}', auth.checkAuthentication, favoritesController.deleteFavorite);
 
 export default router;
