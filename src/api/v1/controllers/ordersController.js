@@ -11,10 +11,10 @@ const createOrder = async (req, res) => {
   }
 }
 
-const getOrdersByAuthUser = async (req, res) => {
+const getPurchasesByUser = async (req, res) => {
   try {
     const id_user = req.auth.id_user
-    const orders = await orderModel.getUserOrders(id_user)
+    const orders = await orderModel.getPurchases(id_user)
     if (!orders) {
       return res.status(404).json({ message: 'Órden no encontrada' })
     }
@@ -24,4 +24,17 @@ const getOrdersByAuthUser = async (req, res) => {
   }
 }
 
-export const ordersController = { createOrder, getOrdersByAuthUser }
+const getSellsByUser = async (req, res) => {
+  try {
+    const id_user = req.auth.id_user
+    const orders = await orderModel.getSells(id_user)
+    if (!orders) {
+      return res.status(404).json({ message: 'Órden no encontrada' })
+    }
+    res.json(orders)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const ordersController = { createOrder, getPurchasesByUser, getSellsByUser }

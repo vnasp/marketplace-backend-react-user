@@ -57,6 +57,7 @@ CREATE TABLE orders (
 CREATE TABLE order_details (
     id_order INT NOT NULL,
     id_product INT NOT NULL,
+    unit_price NUMERIC(10, 0) NOT NULL,
     product_quantity INT NOT NULL,
     CONSTRAINT fk_orders_details_orders
         FOREIGN KEY(id_order) 
