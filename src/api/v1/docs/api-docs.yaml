@@ -18,8 +18,7 @@ paths:
   /users:
     post:
       summary: User creation
-      tags:
-        - Users
+      tags: [Users]
       requestBody:
         required: true
         content:
@@ -56,8 +55,7 @@ paths:
       security:
         - BearerAuth: []
       summary: Get user information
-      tags:
-        - Users
+      tags: [Users]
       parameters:
         - name: id_user
           in: path
@@ -90,8 +88,7 @@ paths:
         - BearerAuth: []
       summary: Update user information.
       description: Updates a user's information.
-      tags:
-        - Users
+      tags: [Users]
       parameters:
         - name: id_user
           in: path
@@ -136,8 +133,7 @@ paths:
       security:
         - BearerAuth: []
       summary: Product creation
-      tags: 
-        - Products
+      tags: [Products]
       requestBody:
         required: true
         content:
@@ -164,8 +160,7 @@ paths:
     get:
       summary: Get all products information
       description: Retrieves all products information. Filtering and sorting should be handled on the frontend, as this endpoint returns all products without support for backend filtering or sorting parameters.
-      tags: 
-        - Products
+      tags: [Products]
       responses:
         '200':
           description: Success. The request has successfully loaded the product information.
@@ -182,8 +177,7 @@ paths:
   /products/{id}:
     get:
       summary: Get specific product information
-      tags: 
-        - Products
+      tags: [Products]
       parameters:
         - name: id
           in: path
@@ -206,8 +200,7 @@ paths:
       security:
         - BearerAuth: []
       summary: Delete product.
-      tags: 
-        - Products
+      tags: [Products]
       parameters:
         - name: id
           in: path
@@ -238,8 +231,7 @@ paths:
         - BearerAuth: []
       summary: Order creation
       description: This endpoint facilitates the creation of new orders. The id_order is generated automatically and id_user is determined from the user's authentication token, for these reasons aren't included in this schema.
-      tags: 
-        - Orders
+      tags: [Orders]
       requestBody:
         required: true
         content:
@@ -274,8 +266,7 @@ paths:
         - BearerAuth: []
       summary: Get orders for the authenticated user
       description: Load all orders placed by the authenticated user. The user is identified through the authentication token.
-      tags: 
-        - Orders
+      tags: [Orders]
       responses:
         '200':
           description: Success. The request has successfully loaded the orders for the authenticated user.
@@ -335,30 +326,30 @@ paths:
     post:
       security:
         - BearerAuth: []
-      summary: Favorites creation
-      description: This endpoint allows adding a product to the user's favorites. The user is identified through the authentication token, so id_user isn't needed in the request body.
+      summary: Add a product to the user's favorites
+      description: Adds a specified product to the authenticated user's favorites. The user is identified through the authentication token.
       tags: [Favorites]
       requestBody:
         required: true
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/Favorites'
+              type: object
+              properties:
+                id_product:
+                  type: integer
+                  description: The ID of the product to add to favorites.
+              required:
+                - id_product
             example:
               id_product: 1
       responses:
         '201':
           description: Success. The product has been added to the user's favorites.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Favorites'
-              example:
-                id_product: 1
         '400':
           description: Bad Request. The request was invalid or can't be served due to bad syntax.
         '409':
-          description: Conflict. The request conflicts with the current state of the server, such as duplicate entries.
+          description: Conflict. The product is already in the user's favorites.
     get:
       security:
         - BearerAuth: []
@@ -383,6 +374,27 @@ paths:
           description: Bad Request. The request was invalid or can't be served due to bad syntax.
         '404':
           description: Not Found. No favorites were found for the user.
+  /favorites/{id_product}:
+    delete:
+      security:
+        - BearerAuth: []
+      summary: Delete a favorite for the authenticated user
+      description: Deletes a specific product from the authenticated user's favorites. The user is identified through the authentication token.
+      tags: [Favorites]
+      parameters:
+        - name: id_product
+          in: path
+          description: The ID of the product to delete from favorites.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Success. The product has been removed from the user's favorites.
+        '400':
+          description: Bad Request. The request was invalid or can't be served due to bad syntax, such as an invalid product ID.
+        '404':
+          description: Not Found. The specified product is not in the user's favorites.
 components:
   securitySchemes:
     BearerAuth:
