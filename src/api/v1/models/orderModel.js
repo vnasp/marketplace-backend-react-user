@@ -1,44 +1,104 @@
-/*
-::createOrder()
+import pool from "../../../../config/database/connection.js"
 
-request
-{
-  "order": {
-    "id_order": 1234,
-    "id_user": 1,
-    "total_price": 30000,
-    "id_product": 1,
-    "product_quantity": 1,
-    "purchase_date": "2024-02-14T18:00:00.000Z"
+
+// Creación de la orden y luego crear el detalle
+const createOrderDB = async (orderData) => {
+  const { id_user, total_price, products } = orderData
+  if (total_price <= 0) {
+    throw new Error('El monto total debe ser mayor que cero.')
+  }
+  if (!Array.isArray(products) || products.length === 0) {
+    throw new Error('La orden debe contener al menos un producto.')
+  }
+  products.forEach(product => {
+    if (product.product_quantity <= 0) {
+      throw new Error('La cantidad de cada producto debe ser mayor que cero.')
+    }
+  })
+
+  try {
+    await pool.query('BEGIN')
+    // Creamos la orden y obtenemos el id_order y la fecha
+    const createOrder = await pool.query('INSERT INTO orders (id_user, total_price) VALUES ($1, $2) RETURNING id_order, purchase_date', [id_user, total_price])
+    const { id_order, purchase_date } = createOrder.rows[0]
+
+    // Con el id_order obtenido, se inserta cada producto en order_details
+    for (const product of products) {
+      const { id_product, unit_price, product_quantity } = product
+      await pool.query('INSERT INTO order_details (id_order, id_product, unit_price, product_quantity) VALUES ($1, $2, $3, $4)', [id_order, id_product, unit_price, product_quantity])
+    }
+    await pool.query('COMMIT')
+    return { id_order, id_user, total_price, products, purchase_date }
+  } catch (error) {
+    await pool.query('ROLLBACK') // Si no se crean los detalles, que deshaga todo
+    throw error
   }
 }
 
-response
-{
-  "id_order": 1234,
-  "id_user": 1,
-  "total_price": 30000,
-  "id_product": 1,
-  "product_quantity": 1,
-  "purchase_date": "2024-02-14T18:00:00.000Z"
-}
-*/
+// Obtenemos las compras del usuario
+const getPurchases = async (id) => {
+  try {
+    const where = []
+    const values = []
+    let sql = `
+      SELECT
+          orders.id_order,
+          orders.total_price,
+          orders.purchase_date,
+          products.id_product,
+          products.name AS product_name,
+          order_details.unit_price,
+          order_details.product_quantity
+      FROM orders
+      INNER JOIN order_details ON orders.id_order = order_details.id_order
+      INNER JOIN products ON order_details.id_product = products.id_product`;
+    if (id) {
+      where.push(`(orders.id_user = $${values.length + 1})`)
+      values.push(id)
+    }
 
-/*
-::getOrder()
+    if (where.length > 0) {
+      sql += ` WHERE ${where.join(' AND ')}`
+    }
 
-::getOrders()
+    const purchases = await pool.query(sql, values);
+    return purchases.rows;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 
-request
-id_user
+// Obtenemos las ventas del usuario a través del id_user de quien creó el producto vendido
+const getSells = async (id) => {
+  try {
+    const where = []
+    const values = []
+    let sql = `
+      SELECT 
+          orders.id_order,
+          orders.purchase_date,
+          order_details.id_product,
+          products.name AS product_name,
+          order_details.unit_price,
+          order_details.product_quantity
+      FROM orders
+      INNER JOIN order_details
+      ON orders.id_order = order_details.id_order 
+      INNER JOIN products ON order_details.id_product = products.id_product`;
+      if (id) {
+        where.push(`(products.id_user = $${values.length + 1})`)
+        values.push(id)
+      }
+  
+      if (where.length > 0) {
+        sql += ` WHERE ${where.join(' AND ')}`
+      }
+  
+      const sells = await pool.query(sql, values);
+      return sells.rows;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
 
-response
-[{
-  "id_order": 1234,
-  "id_user": 1,
-  "total_price": 30000,
-  "id_product": 1,
-  "product_quantity": 1,
-  "purchase_date": "2024-02-14T18:00:00.000Z"
-}]
-*/
+export const orderModel = { createOrderDB, getPurchases, getSells }
