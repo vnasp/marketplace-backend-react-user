@@ -30,3 +30,4 @@ const updateFavorites = async (req, res) => {
 };
 
 export const favoritesController = { updateFavorites, addFavorite, getFavoritesByAuthUser, deleteFavorite };
+

@@ -21,6 +21,7 @@ router
         res.status(405).json({ message: "Method not allowed" });
     });
 
+
 // el auth es el que han usado los chiquillos, de ahí obtienen el id del usuario, sin necesidad de pasar el id en la URL
 // este para agregar favoritos
 router.post('/favorites', auth.checkAuthentication, favoritesController.addFavorite);
