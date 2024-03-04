@@ -53,7 +53,7 @@ const productCreationValidation = [
  *       bearerFormat: JWT
  *   schemas:
  *     Products:
- *       description: This schema represents products. For security reasons and to prevent misuse, updating products via PUT methods is not allowed. All products must be carefully managed through supported operations to ensure the integrity and reliability of the catalog.
+ *       description: This schema represents products. For security reasons and to prevent misuse, updating products via PUT methods is not allowed.
  *       type: object
  *       required:
  *         - name
@@ -67,7 +67,7 @@ const productCreationValidation = [
  *           description: Product name
  *         price:
  *           type: integer
- *           description: Product price in Chilean Pesos (CLP) without decimal values.
+ *           description: Product price in Chilean Pesos (CLP) without decimal values
  *         description:
  *           type: string
  *           description: Product description

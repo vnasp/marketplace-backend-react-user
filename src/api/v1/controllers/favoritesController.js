@@ -1,5 +1,13 @@
 import { favoriteModel } from "../models/favoriteModel.js";
 
+const addFavorite = async(req, res) => {};
+
+const getFavoritesByAuthUser = async(req,res) =>{};
+
+const deleteFavorite = async(req, res) => {};
+
+
+// Este es el PUT que debería pasarse a POST y DELETE
 const updateFavorites = async (req, res) => {
     try {
         const { id_user } = req.params.id;
@@ -21,4 +29,4 @@ const updateFavorites = async (req, res) => {
     }
 };
 
-export const favoritesController = { updateFavorites };
+export const favoritesController = { addFavorite, getFavoritesByAuthUser, deleteFavorite };
