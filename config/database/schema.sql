@@ -47,16 +47,17 @@ CREATE TABLE orders (
     id_order SERIAL PRIMARY KEY,
     id_user INT NOT NULL,
     total_price NUMERIC(10, 0) NOT NULL,
-    purchase_date TIMESTAMP NOT NULL,
+    purchase_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_orders_users
         FOREIGN KEY(id_user)
         REFERENCES users(id_user)
         ON DELETE CASCADE
 );
 
-CREATE TABLE orders_details (
+CREATE TABLE order_details (
     id_order INT NOT NULL,
     id_product INT NOT NULL,
+    unit_price NUMERIC(10, 0) NOT NULL,
     product_quantity INT NOT NULL,
     CONSTRAINT fk_orders_details_orders
         FOREIGN KEY(id_order) 

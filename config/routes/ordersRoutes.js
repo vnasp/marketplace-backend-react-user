@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.post('/orders', auth.checkAuthentication, ordersController.createOrder);
 
-router.get('/orders', auth.checkAuthentication, ordersController.getOrdersByAuthUser);
+router.get('/orders/purchases', auth.checkAuthentication, ordersController.getPurchasesByUser);
+router.get('/orders/sells', auth.checkAuthentication, ordersController.getSellsByUser);
+
 
 export default router;

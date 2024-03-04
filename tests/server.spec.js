@@ -6,6 +6,7 @@ describe("Mi Market Latino", () => {
     it("GET /users : returns code 200 and array", async () => {
         const response = await request(app)
             .get("/users")
+            .set("Authorization", `Bearer: ${generateToken()}`)
             .send();
         
         expect(response.statusCode).toBe(200);
@@ -17,6 +18,7 @@ describe("Mi Market Latino", () => {
             .post("/login")
             .send(credentials_valid);
         
+        expect(response.statusCode).toBe(201);
         expect(response.body).toBeInstanceOf(Object);
     });
 

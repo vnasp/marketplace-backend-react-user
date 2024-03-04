@@ -1,24 +1,53 @@
 import pool from "../../../../config/database/connection.js";
 
 const getProductsDB = async () => {
-    const { rows } = await pool.query('SELECT * FROM products');
-    return rows;
+  try {
+      const { rows } = await pool.query(`
+          SELECT p.*, CONCAT(u.firstname, ' ', u.lastname) AS seller_name
+          FROM products p
+          JOIN users u ON p.id_user = u.id_user
+      `);
+      return rows;
+  } catch (error) {
+      console.error('Error getting products with seller information:', error);
+      throw error;
+  }
 };
 
 const getProductDB = async (id) => {
-    const { rows } = await pool.query('SELECT * FROM products WHERE id_product = $1', [id]);
-    return rows[0];
+  try {
+      const { rows } = await pool.query(`
+          SELECT p.*, CONCAT(u.firstname, ' ', u.lastname) AS seller_name
+          FROM products p
+          JOIN users u ON p.id_user = u.id_user
+          WHERE p.id_product = $1
+      `, [id]);
+      return rows[0];
+  } catch (error) {
+      console.error(`Error getting product with id ${id} and seller information:`, error);
+      throw error;
+  }
 };
 
 const createProductDB = async (product) => {
-    const { id_user, name, price, description, image_url, category } = product;
-    const { rows } = await pool.query('INSERT INTO products (id_user, name, price, description, image_url, category, date_add) VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP) RETURNING *', [id_user, name, price, description, image_url, category]);
-    return rows[0];
+  try {
+      const { id_user, name, price, description, image_url, category } = product;
+      const { rows } = await pool.query('INSERT INTO products (id_user, name, price, description, image_url, category, date_add) VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP) RETURNING *', [id_user, name, price, description, image_url, category]);
+      return rows[0];
+  } catch (error) {
+      console.error('Error creating product:', error);
+      throw error;
+  }
 };
 
 const deleteProductDB = async (id) => {
-    const { rows } = await pool.query('DELETE FROM products WHERE id_product = $1 RETURNING *', [id]);
-    return rows[0];
+  try {
+      const { rows } = await pool.query('DELETE FROM products WHERE id_product = $1 RETURNING *', [id]);
+      return rows[0];
+  } catch (error) {
+      console.error(`Error deleting product with id ${id}:`, error);
+      throw error;
+  }
 };
 
 export const productModel = { getProductsDB, getProductDB, createProductDB, deleteProductDB };

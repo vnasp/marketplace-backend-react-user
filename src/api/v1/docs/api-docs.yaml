@@ -261,6 +261,7 @@ paths:
           description: Bad Request. The request was invalid or can't be served due to bad syntax.
         '409':
           description: Conflict. The request conflicts with the current state of the server, such as duplicate entries.
+  /orders/purchases:
     get:
       security:
         - BearerAuth: []
@@ -293,6 +294,37 @@ paths:
           description: Bad Request. The request was invalid or can't be served due to bad syntax.
         '404':
           description: Not Found. No orders were found for the user.
+  /orders/sells:
+    get:
+      security:
+      - BearerAuth: []
+      summary: Get orders for products sold by the authenticated user
+      description: Load all orders containing products that were created by the authenticated user. The user is identified through the authentication token.
+      tags: [Orders]
+      responses:
+      '200':
+        description: Success. The request has successfully loaded the orders for the authenticated user.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/OrderListResponse'
+            example:
+              - id_order: 1
+                id_user: 2
+                purchase_date: "2023-01-01T00:00:00Z"
+                id_product: 1
+                product_quantity: 2
+              - id_order: 2
+                id_user: 2
+                purchase_date: "2023-01-01T00:00:00Z"
+                id_product: 3
+                product_quantity: 3
+      '400':
+        description: Bad Request. The request was invalid or can't be served due to bad syntax.
+      '404':
+        description: Not Found. No orders were found where user create the product.
   /login:
     post:
       summary: User authentication
@@ -546,6 +578,7 @@ components:
         - total_price
         - purchase_date
         - id_product
+        - unit_price
         - product_quantity
       properties:
         total_price:
@@ -558,6 +591,9 @@ components:
         id_product:
           type: integer
           description: Product ID purchased
+        unit_price:
+          type: integer
+          description: Product unitary price
         product_quantity:
           type: integer
           description: Quantity of the product purchased
@@ -565,6 +601,7 @@ components:
         total_price: 10000
         purchase_date: "2023-01-01T00:00:00Z"
         id_product: 1
+        unit_price: 5000
         product_quantity: 2
     OrderResponse:
       type: object
@@ -574,6 +611,7 @@ components:
         - total_price
         - purchase_date
         - id_product
+        - unit_price
         - product_quantity
       properties:
         id_order:
@@ -592,6 +630,9 @@ components:
         id_product:
           type: integer
           description: Product ID purchased
+        unit_price:
+          type: integer
+          description: Product unitary price
         product_quantity:
           type: integer
           description: Quantity of the product purchased
@@ -601,6 +642,7 @@ components:
         total_price: 10000
         purchase_date: "2023-01-01T00:00:00Z"
         id_product: 1
+        unit_price: 5000
         product_quantity: 2
     OrderListResponse:
       type: array
