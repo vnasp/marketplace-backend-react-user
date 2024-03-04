@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { logger } from 'logger-express';
+// import { logger } from 'logger-express';
 import swagger from './config/swagger/swagger.js';
 import loginRoutes from './config/routes/loginRoutes.js';
 import usersRoutes from './config/routes/usersRoutes.js';
@@ -17,7 +17,7 @@ const app = express();
 swagger(app)
 app.use(express.json());
 app.use(cors());
-app.use(logger());
+// app.use(logger());
 app.use("/api/v1", loginRoutes);
 app.use("/api/v1", usersRoutes);
 app.use("api/v1", productsRoutes);
@@ -29,3 +29,5 @@ app.listen(PORT, () => {
   console.log(`App listening at http://localhost:${PORT}`);
   console.log(`Swagger docs available at http://localhost:${PORT}/api/v1/docs`);
 });
+
+export default app;
