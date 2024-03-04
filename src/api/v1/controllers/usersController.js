@@ -23,6 +23,7 @@ const getUser = async(req, res) => {
         const { id_user } = req.auth;
 
         const user = await userModel.getUser({ id_user });
+        delete(user.password);
         res.locals.statusText = user;
         return res.status(200).json(res.locals.statusText);
     } catch (error) {
@@ -48,6 +49,7 @@ const editUser = async(req, res) => {
             return res.status(500).json(res.locals.statusText);
         }
 
+        delete(editUser.password);
         return res.status(200).json(editUser);
     } catch (error) {
         res.locals.statusText = { error: `${error.message}` };
