@@ -54,7 +54,7 @@ CREATE TABLE orders (
         ON DELETE CASCADE
 );
 
-CREATE TABLE orders_details (
+CREATE TABLE order_details (
     id_order INT NOT NULL,
     id_product INT NOT NULL,
     product_quantity INT NOT NULL,
