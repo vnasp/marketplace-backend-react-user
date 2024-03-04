@@ -22,11 +22,11 @@ router
 
 /**
  * @swagger
- *  tags:
- *    name: Favorites
- *    description: Favorites API management
- *  security:
- *    BearerAuth: []
+ * tags:
+ *   name: Favorites
+ *   description: Favorites API management
+ * security:
+ *   BearerAuth: []
 */
 
 /**

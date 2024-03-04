@@ -6,11 +6,11 @@ const router = express.Router();
 
 /**
  * @swagger
- *  tags:
- *    name: Orders
- *    description: Orders API management
- *  security:
- *    BearerAuth: []
+ * tags:
+ *   name: Orders
+ *   description: Orders API management
+ * security:
+ *   BearerAuth: []
 */
 
 /**
