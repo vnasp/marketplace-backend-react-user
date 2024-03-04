@@ -1,18 +1,37 @@
 import { favoriteModel } from "../models/favoriteModel.js";
 
-const addFavorite = async(req, res) => {};
+// method: POST
+const addFavorites = async (req, res) => {
+    try {
+        const { id_user } = req.auth.id_user;
+        const { id_product } = req.body;
+        await favoriteModel.addFavorite(id_user, id_product);
+        return res.status(201).json({ id_user, id_product });
+    } catch (error) {
+        throw new Error("Error adding favorite: " + error.message);
+    }
+};
 
-const getFavoritesByAuthUser = async(req,res) =>{};
+// method: GET
+const getFavoritesByUser = async (req, res) => {
+    try {
+        const { id_user } = req.auth.id_user;
+        const favorites = await favoriteModel.existingFavorite(id_user);
+        return res.status(200).json(favorites);
+    } catch (error) {
+        throw new Error("Error adding favorite: " + error.message);
+    }
+};
 
-const deleteFavorite = async(req, res) => {};
-
-
-// Este es el PUT que debería pasarse a POST y DELETE
+// method: PUT
 const updateFavorites = async (req, res) => {
     try {
         const { id_user } = req.params.id;
         const { id_product } = req.body;
-        const isFavorite = await favoriteModel.existingFavorite(id_user, id_product);
+        const isFavorite = await favoriteModel.existingFavorite(
+            id_user,
+            id_product
+        );
         if (isFavorite) {
             await favoriteModel.removeFavorite(id_user, id_product);
             return res
@@ -29,5 +48,21 @@ const updateFavorites = async (req, res) => {
     }
 };
 
-export const favoritesController = { updateFavorites, addFavorite, getFavoritesByAuthUser, deleteFavorite };
+// method: DELETE
+const removeFavorites = async (req, res) => {
+    try {
+        const { id_user }= req.auth.id_user;
+        const { id_product } = req.body;
+        await favoriteModel.removeFavorite(id_user, id_product);
+        return res.status(201).json({ id_user, id_product });
+    } catch (error) {
+        throw new Error("Error removing favorite: " + error.message);
+    }
+};
 
+export const favoritesController = {
+    addFavorites,
+    getFavoritesByUser,
+    updateFavorites,
+    removeFavorites,
+};
