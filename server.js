@@ -5,8 +5,8 @@ import swagger from './config/swagger/swagger.js';
 import loginRoutes from './config/routes/loginRoutes.js';
 import usersRoutes from './config/routes/usersRoutes.js';
 import productsRoutes from './config/routes/productsRoutes.js';
-import ordersRoutes from './config/routes/productsRoutes.js';
-import favoritesRoutes from './config/routes/productsRoutes.js';
+import ordersRoutes from './config/routes/ordersRoutes.js';
+import favoritesRoutes from './config/routes/favoritesRoutes.js';
 import {errorController} from './src/api/v1/controllers/errorController.js';
 import 'dotenv/config';
 

@@ -1,8 +1,24 @@
-import express from 'express';
-import { auth } from "../../middlewares/auth.js";
-import {favoritesController} from '../../src/api/v1/controllers/favoritesController.js';
+import { Router } from "express";
 
+// controller
+import { favoritesController } from "../../src/api/v1/controllers/favoritesController.js";
+
+// auth
+import { auth } from "../../middlewares/auth.js";
+
+/* Los chiquillos importan así, para que revisen y queden todos los routes iguales 
+import express from 'express';
 const router = express.Router();
+*/
+
+const router = Router();
+
+router
+    .route("/favorites/:id")
+    .put(favoritesController.updateFavorites)
+    .all((req, res, next) => {
+        res.status(405).json({ message: "Method not allowed" });
+    });
 
 /**
  * @swagger

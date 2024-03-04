@@ -13,7 +13,6 @@ const router = express.Router();
 
 // Validaciones para la creación de productos
 const productCreationValidation = [
-    body('id_user').isInt().withMessage('ID del usuario debe ser un número entero'),
     body('name').not().isEmpty().withMessage('El nombre es requerido'),
     body('price').isNumeric().withMessage('El precio debe ser un número').isFloat({ min: 0.01 }).withMessage('El precio debe ser mayor que 0'),
     body('description').optional().isLength({ min: 0 }),
@@ -125,7 +124,7 @@ const productCreationValidation = [
  */
 
 // Creación de producto - privado
-router.post('/products', productCreationValidation, handleValidationErrors, productsController.createProduct);
+router.post('/products', auth.checkAuthentication, productCreationValidation, handleValidationErrors, productsController.createProduct);
 
 /**
  * @swagger

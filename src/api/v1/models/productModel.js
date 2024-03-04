@@ -21,7 +21,7 @@ const deleteProductDB = async (id) => {
     return rows[0];
 };
 
-export const productsModel = { getProductsDB, getProductDB, createProductDB, deleteProductDB };
+export const productModel = { getProductsDB, getProductDB, createProductDB, deleteProductDB };
 
 /*
 ::createProduct()

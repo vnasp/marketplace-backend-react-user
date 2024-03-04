@@ -31,7 +31,7 @@ const getUser = async ({ id_user, email, id_user_diff }) => {
 
 const getUsers = async ({ id_user, email, id_user_diff }) => {
     try {
-        const where = []
+        const where = [];
         const values = [];
 
         let sql = `
@@ -54,7 +54,7 @@ const getUsers = async ({ id_user, email, id_user_diff }) => {
             where.push(`(users.id_user = $${values.length + 1})`);
             values.push(id_user);
         }
-        
+
         if (email) {
             where.push(`(users.email = $${values.length + 1})`);
             values.push(email);
@@ -70,7 +70,7 @@ const getUsers = async ({ id_user, email, id_user_diff }) => {
         }
 
         const users = await pool.query(sql, values);
-        
+
         return users.rows;
     } catch (error) {
         throw new Error(error.message);
@@ -108,13 +108,16 @@ response
   "date_upd": "2024-02-14T16:00:00.000Z"
 }
 */
-const createUser = async ({ 
-    firstname, lastname,
-    email, password,
-    address, phone,
+const createUser = async ({
+    firstname,
+    lastname,
+    email,
+    password,
+    address,
+    phone,
     avatar_url,
-    id_user_google }) => {
-
+    id_user_google,
+}) => {
     if (!firstname || !lastname || !email || !password) {
         throw new Error("Required parameters are missing.");
     }
@@ -133,11 +136,14 @@ const createUser = async ({
             RETURNING *`;
 
         const result = await pool.query(sql, [
-            firstname, lastname,
-            email, bcript.hashSync(password),
-            address, phone,
+            firstname,
+            lastname,
+            email,
+            bcript.hashSync(password),
+            address,
+            phone,
             avatar_url,
-            id_user_google
+            id_user_google,
         ]);
 
         return result.rows[0];
@@ -169,29 +175,30 @@ response
 
 const editUser = async ({
     id_user,
-    firstname, lastname,
-    email, password,
-    address, phone,
+    firstname,
+    lastname,
+    email,
+    password,
+    address,
+    phone,
     avatar_url,
     id_user_google,
-    date_upd }) => {
-        
+    date_upd,
+}) => {
     if (!id_user) {
         throw new Error("Required parameters are missing.");
     }
 
     try {
         const set = [];
-        const values = [ id_user ];
-        const where = [
-            `(users.id_user = $1)`
-        ];
+        const values = [id_user];
+        const where = [`(users.id_user = $1)`];
 
         if (firstname) {
             set.push(`firstname = $${values.length + 1}`);
             values.push(firstname);
         }
-        
+
         if (lastname) {
             set.push(`lastname = $${values.length + 1}`);
             values.push(lastname);
@@ -201,7 +208,7 @@ const editUser = async ({
             set.push(`email = $${values.length + 1}`);
             values.push(email);
         }
-        
+
         if (password) {
             set.push(`password = $${values.length + 1}`);
             values.push(bcript.hashSync(password));
@@ -211,7 +218,7 @@ const editUser = async ({
             set.push(`address = $${values.length + 1}`);
             values.push(address);
         }
-        
+
         if (phone) {
             set.push(`phone = $${values.length + 1}`);
             values.push(phone);
@@ -221,7 +228,7 @@ const editUser = async ({
             set.push(`avatar_url = $${values.length + 1}`);
             values.push(avatar_url);
         }
-        
+
         if (id_user_google) {
             set.push(`id_user_google = $${values.length + 1}`);
             values.push(id_user_google);
@@ -230,7 +237,7 @@ const editUser = async ({
         if (date_upd) {
             set.push(`date_upd = CURRENT_TIMESTAMP AT TIME ZONE 'UTC'`);
         }
-        
+
         if (!set.length || !where.length) {
             throw new Error("Required parameters are missing.");
         }
@@ -252,4 +259,29 @@ const editUser = async ({
     }
 };
 
-export const usersModel = { getUser, getUsers, createUser, editUser };
+const registerOrLoginWithGoogle = async (profile) => {
+    try {
+        // find if user already exists
+        let user = await findUserByEmail(profile.emails[0].value);
+        // if user doesn't exist, create it
+        if (!user) {
+            user = await createUser({
+                firstname: profile.name.givenName,
+                lastname: profile.name.familyName,
+                email: profile.emails[0].value,
+                password: "",
+                address: "",
+                phone: "",
+                avatar_url: profile.photos[0].value,
+                id_user_google: profile.id,
+            });
+        }
+        return user;
+    } catch (error) {
+        throw new Error(
+            "Error registering or login with Google: " + error.message
+        );
+    }
+};
+
+export const userModel = { getUser, getUsers, createUser, editUser, registerOrLoginWithGoogle };
