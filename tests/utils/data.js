@@ -2,21 +2,41 @@ import "dotenv/config";
 import jwt from "jsonwebtoken";
 import { faker } from "@faker-js/faker";
 
-const credentials_valid = {
+const credentialsValid = {
     id_user  : 1,
     email    : "jlo@mimarketlatino.com",
     password : "1234"
 };
 
-const credentials_invalid = {
-    email    : faker.internet.email()+"!",
+const credentialsInvalid = {
+    email    : faker.internet.email(),
     password : faker.internet.password()
 };
 
+const userNew = {
+    email     : faker.internet.email(),
+    password  : faker.internet.password(),
+    firstname : faker.person.firstName(),
+    lastname  : faker.person.lastName()
+};
+
+const userEdit = {
+    phone: faker.phone.number()
+};
+
+const userGoogle = {
+    email    : "mimarketlatino@gmail.com",
+    password : "migentelatino"
+};
+
 const generateToken = () => {
-    return jwt.sign({ id_user: credentials_valid.id_user }, process.env.JWT_SECRET || "az_AZ", {
+    return jwt.sign({ id_user: credentialsValid.id_user }, process.env.JWT_SECRET || "az_AZ", {
         expiresIn : "1m"
     });
 };
 
-export { credentials_valid, credentials_invalid, generateToken };
+export { 
+    credentialsValid, credentialsInvalid, 
+    userNew, userEdit, userGoogle,
+    generateToken
+};

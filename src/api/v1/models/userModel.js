@@ -259,29 +259,4 @@ const editUser = async ({
     }
 };
 
-const registerOrLoginWithGoogle = async (profile) => {
-    try {
-        // find if user already exists
-        let user = await getUsers(profile.emails[0].value);
-        // if user doesn't exist, create it
-        if (!user) {
-            user = await createUser({
-                firstname: profile.name.givenName,
-                lastname: profile.name.familyName,
-                email: profile.emails[0].value,
-                password: "",
-                address: "",
-                phone: "",
-                avatar_url: profile.photos[0].value,
-                id_user_google: profile.id,
-            });
-        }
-        return user;
-    } catch (error) {
-        throw new Error(
-            "Error registering or login with Google: " + error.message
-        );
-    }
-};
-
-export const userModel = { getUser, getUsers, createUser, editUser, registerOrLoginWithGoogle };
+export const userModel = { getUser, getUsers, createUser, editUser };
