@@ -14,7 +14,7 @@ const getProduct = async (req, res) => {
         const { id } = req.params;
         const product = await productModel.getProductDB(id);
         if (!product) {
-            return res.status(404).json({ message: 'Producto no encontrado' });
+            return res.status(404).json({ message: 'Product not found' });
         }
         res.json(product);
     } catch (error) {
@@ -42,9 +42,9 @@ const deleteProduct = async (req, res) => {
         const { id } = req.params;
         const deletedProduct = await productModel.deleteProductDB(id);
         if (!deletedProduct) {
-            return res.status(404).json({ message: 'Producto no encontrado' });
+            return res.status(404).json({ message: 'Product not found' });
         }
-        res.json({ message: 'Producto eliminado con éxito', product: deletedProduct });
+        res.json({ message: 'Product successfully removed', product: deletedProduct });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

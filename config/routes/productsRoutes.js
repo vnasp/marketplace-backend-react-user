@@ -13,16 +13,16 @@ const router = express.Router();
 
 // Validaciones para la creación de productos
 const productCreationValidation = [
-    body('name').not().isEmpty().withMessage('El nombre es requerido'),
-    body('price').isNumeric().withMessage('El precio debe ser un número').isFloat({ min: 0.01 }).withMessage('El precio debe ser mayor que 0'),
+    body('name').not().isEmpty().withMessage('The name is required'),
+    body('price').isNumeric().withMessage('The price must be a number').isFloat({ min: 0.01 }).withMessage('The price must be greater than 0'),
     body('description').optional().isLength({ min: 0 }),
-    body('image_url').isURL().withMessage('La URL de la imagen no es válida'),
-    body('category').isIn(['Plantas', 'Manualidades', 'Música', 'Bienestar']).withMessage('La categoría no es válida'),
+    body('image_url').isURL().withMessage('The image URL is not valid'),
+    body('category').isIn(['Plantas', 'Manualidades', 'Música', 'Bienestar']).withMessage('The category is not valid'),
   ];
   
   // Validación para el ID del producto en la URL
   const productIdValidation = [
-    param('id').isInt().withMessage('El ID del producto debe ser un número entero')
+    param('id').isInt().withMessage('The product ID must be an integer')
   ];
   
   // Middleware para manejar los errores de validación
