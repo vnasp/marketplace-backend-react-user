@@ -143,7 +143,7 @@ const createUser = async ({
             address,
             phone,
             avatar_url,
-            id_user_google,
+            id_user_google || null,
         ]);
 
         return result.rows[0];
@@ -262,7 +262,7 @@ const editUser = async ({
 const registerOrLoginWithGoogle = async (profile) => {
     try {
         // find if user already exists
-        let user = await findUserByEmail(profile.emails[0].value);
+        let user = await getUsers(profile.emails[0].value);
         // if user doesn't exist, create it
         if (!user) {
             user = await createUser({
