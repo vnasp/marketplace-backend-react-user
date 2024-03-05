@@ -13,26 +13,38 @@ const googleAuthCallbackController = passport.authenticate("google", {
 // for future deployment, check if the successRedirect changes
 
 const handleGoogleCallback = async (req, res, next) => {
-    passport.authenticate("google", async (err, user) => {
+    passport.authenticate("google", async (err, profile) => {
         if (err) {
             return next(err);
         }
-        if (!user) {
+
+        if (!profile) {
             return res.status(401).json({ error: "Authentication failed" });
         }
+        
         try {
-            const registeredUser = await userModel.registerOrLoginWithGoogle(
-                user
-            );
-            return res.status(200).json({ user: registeredUser });
+            const userExists = await userModel.getUser({ email: profile.emails[0]?.value });
+    
+            if (userExists) {
+                res.locals.statusText = { error: "User already exists" };
+                return res.status(400).json(res.locals.statusText);
+            }
+    
+            res.locals.statusText =  await createUser({
+                firstname      : profile.name.givenName,
+                lastname       : profile.name.familyName,
+                email          : profile.emails[0].value,
+                password       : "",
+                address        : "",
+                phone          : "",
+                avatar_url     : profile.photos[0].value,
+                id_user_google : profile.id,
+            });
+
+            return res.status(201).json(res.locals.statusText);
         } catch (error) {
-            return res
-                .status(500)
-                .json({
-                    error:
-                        "Error registering or logging in with Google: " +
-                        error.message,
-                });
+            res.locals.statusText = { error: `${error.message}` };
+            return res.status(500).json(res.locals.statusText);
         }
     })(req, res, next);
 };
