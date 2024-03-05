@@ -20,10 +20,25 @@ const handleGoogleCallback = async (req, res, next) => {
         if (!user) {
             return res.status(401).json({ error: "Authentication failed" });
         }
-        return res.status(200).json({ user })
+        try {
+            const registeredUser = await userModel.registerOrLoginWithGoogle(
+                user
+            );
+            return res.status(200).json({ user: registeredUser });
+        } catch (error) {
+            return res
+                .status(500)
+                .json({
+                    error:
+                        "Error registering or logging in with Google: " +
+                        error.message,
+                });
+        }
     })(req, res, next);
 };
 
-userModel.registerOrLoginWithGoogle;
-
-export { googleAuthController, googleAuthCallbackController, handleGoogleCallback };
+export {
+    googleAuthController,
+    googleAuthCallbackController,
+    handleGoogleCallback,
+};
