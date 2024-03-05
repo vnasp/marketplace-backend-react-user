@@ -24,6 +24,11 @@ const userEdit = {
     phone: faker.phone.number()
 };
 
+const userGoogle = {
+    email    : "mimarketlatino@gmail.com",
+    password : "migentelatino"
+};
+
 const generateToken = () => {
     return jwt.sign({ id_user: credentialsValid.id_user }, process.env.JWT_SECRET || "az_AZ", {
         expiresIn : "1m"
@@ -32,6 +37,6 @@ const generateToken = () => {
 
 export { 
     credentialsValid, credentialsInvalid, 
-    userNew, userEdit,
+    userNew, userEdit, userGoogle,
     generateToken
 };
