@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cors());
 // app.use(logger());
 app.get("/", (req, res) => {
-    res.send("✅ API online baby!!!!!!");
+    res.send("✅ API online baby!");
 });
 app.use("/api/v1", loginRoutes);
 app.use("/api/v1", usersRoutes);
@@ -33,7 +33,7 @@ app.use("*", errorController.error404);
 app.listen(PORT, () => {
     console.log(`App listening at http://localhost:${PORT}`);
     console.log(`Swagger docs available at http://localhost:${PORT}/api/v1/docs`);
-    console.log(`Swagger production docs available at https://marketplace-backend-react-user.onrender.com/api/v1/docs`);
+    console.log(`Swagger production docs available at https://marketplace-backend-react-user-xwj0.onrender.com/api/v1/docs`);
 });
 
 export default app;
