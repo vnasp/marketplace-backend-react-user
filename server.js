@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cors());
 // app.use(logger());
 app.get("/", (req, res) => {
-    res.send("✅ API online baby!");
+    res.send("✅ API online baby!!!!!!");
 });
 app.use("/api/v1", loginRoutes);
 app.use("/api/v1", usersRoutes);
