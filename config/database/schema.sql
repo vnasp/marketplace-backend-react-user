@@ -59,17 +59,18 @@ CREATE TABLE order_details (
     id_product INT NOT NULL,
     unit_price NUMERIC(10, 0) NOT NULL,
     product_quantity INT NOT NULL,
-    CONSTRAINT fk_orders_details_orders
+    CONSTRAINT fk_order_details_orders
         FOREIGN KEY(id_order) 
         REFERENCES orders(id_order)
         ON DELETE CASCADE,
-    CONSTRAINT fk_orders_details_products
+    CONSTRAINT fk_order_details_products
         FOREIGN KEY(id_product)
         REFERENCES products(id_product)
         ON DELETE CASCADE,
     PRIMARY KEY (id_order, id_product)
 );
 
+/* users */
 INSERT INTO users (
     id_user,
     firstname, lastname,
@@ -89,14 +90,82 @@ VALUES (
     CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
 );
 
+/* products */
 INSERT INTO products (
-    id_user, name, price, description, image_url, category, date_add)
+    id_product,
+    id_user,
+    name,
+    price,
+    description,
+    image_url,
+    category,
+    date_add)
 VALUES (
     1,
+    1,
     'Planta María Juana Kawaii Bordada',
-    30000,
+    9990,
     'Lo mejor de cuatro mundos',
     'https://i.pinimg.com/736x/be/d6/3f/bed63fbd3b545cd5e15e18caf1a89885.jpg',
+    'Plantas',
+    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
+),
+(
+    2,
+    1,
+    'Nombre',
+    9990,
+    'Descripción',
+    'http://',
     'Manualidades',
     CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
+),
+(
+    3,
+    1,
+    'Nombre',
+    9990,
+    'Descripción',
+    'http://',
+    'Música',
+    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
+),
+(
+    4,
+    1,
+    'Nombre',
+    9990,
+    'Descripción',
+    'http://',
+    'Bienestar',
+    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
+);
+
+/* favorites */
+INSERT INTO favorites (id_user, id_product) VALUES (1, 1), (1, 2);
+
+/* orders */
+INSERT INTO orders (
+    id_order,
+    id_user,
+    total_price,
+    purchase_date
+) VALUES (
+    1,
+    1,
+    9990,
+    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
+);
+
+/* order_details */
+INSERT INTO order_details (
+    id_order,
+    id_product,
+    unit_price,
+    product_quantity
+) VALUES (
+    1,
+    1,
+    9990,
+    1
 );
