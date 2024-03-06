@@ -89,3 +89,14 @@ VALUES (
     CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
 );
 
+INSERT INTO products (
+    id_user, name, price, description, image_url, category, date_add)
+VALUES (
+    1,
+    'Planta María Juana Kawaii Bordada',
+    30000,
+    'Lo mejor de cuatro mundos',
+    'https://i.pinimg.com/736x/be/d6/3f/bed63fbd3b545cd5e15e18caf1a89885.jpg',
+    'Manualidades',
+    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
+);
