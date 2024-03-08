@@ -1,6 +1,12 @@
+// bcript
 import bcript from "bcryptjs";
+
+// jwt
 import jwt from "jsonwebtoken";
+
+// model
 import { userModel } from '../models/userModel.js';
+
 
 const login = async(req, res) => {
     try {

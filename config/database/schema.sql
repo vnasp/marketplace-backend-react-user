@@ -1,3 +1,10 @@
+DROP TABLE IF EXISTS order_details;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS favorites;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS users;
+DROP TYPE IF EXISTS category_enum;
+
 CREATE TABLE users (
     id_user SERIAL PRIMARY KEY,
     firstname VARCHAR(255) NOT NULL,
@@ -89,6 +96,7 @@ VALUES (
     CURRENT_TIMESTAMP AT TIME ZONE 'UTC',
     CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
 );
+SELECT setval('users_id_user_seq', 1);
 
 /* products */
 INSERT INTO products (
@@ -140,6 +148,7 @@ VALUES (
     'Bienestar',
     CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
 );
+SELECT setval('products_id_product_seq', 4);
 
 /* favorites */
 INSERT INTO favorites (id_user, id_product) VALUES (1, 1), (1, 2);
@@ -156,6 +165,7 @@ INSERT INTO orders (
     9990,
     CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
 );
+SELECT setval('orders_id_order_seq', 1);
 
 /* order_details */
 INSERT INTO order_details (
