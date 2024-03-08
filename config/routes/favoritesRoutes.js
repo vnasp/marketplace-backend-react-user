@@ -12,24 +12,28 @@ const router = express.Router();
 
 // POST
 router.post(
-    "/favorites",
+    "/favorites/:id_user",
     auth.checkAuthentication,
     favoritesController.addFavorites
 );
 
 // GET
 router.get(
-    "/favorites",
+    "/favorites/:id_user",
     auth.checkAuthentication,
     favoritesController.getFavoritesByUser
 );
 
 // PUT
-router.put("/favorites/:id", favoritesController.updateFavorites);
+router.put(
+    "/favorites/:id_user",
+    auth.checkAuthentication,
+    favoritesController.updateFavorites
+);
 
 // DELETE
 router.delete(
-    "/favorites/:id",
+    "/favorites/:id_user",
     auth.checkAuthentication,
     favoritesController.removeFavorites
 );

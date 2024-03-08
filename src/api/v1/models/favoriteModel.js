@@ -1,14 +1,24 @@
 import pool from "../../../../config/database/connection.js";
 
 // verify an existing favorite
-const existingFavorite = async (id_user, id_product) => {
+const existingFavorite = async (id_user) => {
   const SQLquery = {
-      text: "SELECT * FROM favorites WHERE id_user = $1 AND id_product = $2",
-      values: [id_user, id_product],
+      text: "SELECT * FROM favorites WHERE id_user = $1",
+      values: [id_user],
   };
   try {
       const response = await pool.query(SQLquery);
-      return response.rows.lenght > 0;
+      return response.rows;
+  } catch (error) {
+      throw new Error("Error finding favorite: " + error.message);
+  }
+};
+
+// get favorites by user
+const getFavoriteByUser = async (id_user) => {
+  try {
+      const favorites = await existingFavorite(id_user);
+      return favorites;
   } catch (error) {
       throw new Error("Error finding favorite: " + error.message);
   }
@@ -28,7 +38,7 @@ const addFavorite = async (id_user, id_product) => {
   }
 };
 
-
+// remove product as favorite
 const removeFavorite = async (id_user, id_product) => {
     const SQLquery = {
         text: "DELETE FROM favorites WHERE id_user =$1 AND id_product = $2",
@@ -42,7 +52,7 @@ const removeFavorite = async (id_user, id_product) => {
     }
 };
 
-export const favoriteModel = { existingFavorite, addFavorite, removeFavorite };
+export const favoriteModel = { existingFavorite, getFavoriteByUser, addFavorite, removeFavorite };
 
 /*
 ::editFavorite()
