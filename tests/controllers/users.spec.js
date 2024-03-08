@@ -1,5 +1,10 @@
+// supertest
 import request from "supertest";
+
+// app
 import app from "../../server.js";
+
+// utils
 import { credentialsValid, credentialsInvalid, userNew, userEdit, generateToken } from "../utils/data.js";
 
 describe("Mi Market Latino", () => {

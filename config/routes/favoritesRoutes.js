@@ -9,27 +9,30 @@ import { auth } from "../../middlewares/auth.js";
 const router = express.Router();
 
 // routes
-
-// POST
+// adding favorite - private
 router.post(
-    "/favorites",
+    "/favorites/:id_user",
     auth.checkAuthentication,
     favoritesController.addFavorites
 );
 
-// GET
+// getting user's favorites - private
 router.get(
-    "/favorites",
+    "/favorites/:id_user",
     auth.checkAuthentication,
     favoritesController.getFavoritesByUser
 );
 
-// PUT
-router.put("/favorites/:id", favoritesController.updateFavorites);
+// editing user's favorites - private
+router.put(
+    "/favorites/:id_user",
+    auth.checkAuthentication,
+    favoritesController.updateFavorites
+);
 
-// DELETE
+// deleting a favorite - private
 router.delete(
-    "/favorites/:id",
+    "/favorites/:id_user",
     auth.checkAuthentication,
     favoritesController.removeFavorites
 );

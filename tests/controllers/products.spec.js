@@ -1,5 +1,10 @@
+// supertest
 import request from "supertest";
+
+// app
 import app from "../../server.js";
+
+// utils
 import { generateToken } from "../utils/data.js";
 
 describe('Products API', () => {
@@ -18,7 +23,7 @@ describe('Products API', () => {
     describe('GET /products/:id', () => {
         it('Should return a product by id and have a status code of 200', async () => {
             await request(app)
-                .get('/api/v1/products/1') // Cambiar el id por uno existente en la base de datos
+                .get('/api/v1/products/1')
                 .expect(200)
                 .then(response => {
                     expect(response.body).toHaveProperty('id_product');
@@ -27,7 +32,7 @@ describe('Products API', () => {
 
         it('Should return a 404 status code if the product does not exist', async () => {
             await request(app)
-                .get('/api/v1/products/9999999') // Cambiar el id por uno que NO exista en la base de datos
+                .get('/api/v1/products/9999999')
                 .expect(404)
                 .then(response => {
                     expect(response.body).toHaveProperty('message', 'Product not found');
@@ -35,7 +40,7 @@ describe('Products API', () => {
         });
     });
 
-    let createdProductId; // Variable para almacenar el ID del producto creado
+    let createdProductId; // variable to store the ID of the created product
 
     describe('POST /products', () => {
         it('Should create a product and return a status code of 201', async () => {
@@ -53,7 +58,7 @@ describe('Products API', () => {
                 .send(product)
                 .expect(201);
 
-            // Guardamos el ID del producto creado para usarlo después
+            // save product id for later use
             createdProductId = response.body.id_product;
         });
 
@@ -87,13 +92,13 @@ describe('Products API', () => {
 
         it('Should return a 401 status code if the user is not authenticated', async () => {
             await request(app)
-                .delete('/api/v1/products/1') // Cambiar el id por uno existente en la base de datos
+                .delete('/api/v1/products/1')
                 .expect(401);
         });
 
         it('Should return a 404 status code if the product does not exist', async () => {
             await request(app)
-                .delete('/api/v1/products/9999999') // Cambiar el id por uno que NO exista en la base de datos
+                .delete('/api/v1/products/9999999')
                 .set('Authorization', `Bearer ${generateToken()}`)
                 .expect(404);
         });

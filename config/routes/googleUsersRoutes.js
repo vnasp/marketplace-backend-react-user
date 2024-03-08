@@ -14,13 +14,13 @@ const router = express.Router();
 
 // routes
 
-// GET login with google
+// go to google page to logging or register in with google
 router.get("/google", googleAuthController);
 
-// GET callback
+// after logging or register with google, redirect to certain pages with jwt created with the google token
 router.get("/google/callback", authenticateWithGoogleToken, googleAuthCallbackController);
 
-// POST manage callback
+// manage callback 
 router.post("/google/callback", handleGoogleCallback);
 
 export default router;
