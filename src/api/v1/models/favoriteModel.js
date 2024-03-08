@@ -14,7 +14,7 @@ const existingFavorite = async (id_user) => {
   }
 };
 
-// get favorites by user
+// get favorite by id_user
 const getFavoriteByUser = async (id_user) => {
   try {
       const favorites = await existingFavorite(id_user);

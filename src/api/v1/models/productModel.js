@@ -1,5 +1,6 @@
 import pool from "../../../../config/database/connection.js";
 
+// get product
 const getProductsDB = async () => {
   try {
       const { rows } = await pool.query(`
@@ -14,6 +15,7 @@ const getProductsDB = async () => {
   }
 };
 
+// get product by id and seller information
 const getProductDB = async (id) => {
   try {
       const { rows } = await pool.query(`
@@ -29,6 +31,7 @@ const getProductDB = async (id) => {
   }
 };
 
+// create product
 const createProductDB = async (product) => {
   try {
       const { id_user, name, price, description, image_url, category } = product;
@@ -40,6 +43,7 @@ const createProductDB = async (product) => {
   }
 };
 
+// delete product
 const deleteProductDB = async (id) => {
   try {
       const { rows } = await pool.query('DELETE FROM products WHERE id_product = $1 RETURNING *', [id]);

@@ -1,4 +1,7 @@
+// dotenv
 import "dotenv/config";
+
+// jwt
 import jwt from "jsonwebtoken";
 
 const checkAuthentication = (req, res, next) => {
