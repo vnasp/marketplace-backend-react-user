@@ -5,7 +5,7 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     address VARCHAR(255),
-    phone VARCHAR(20),
+    phone VARCHAR(255),
     avatar_url VARCHAR(255),
     id_user_google VARCHAR(255),
     date_add TIMESTAMP NOT NULL,

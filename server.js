@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 // import { logger } from 'logger-express';
+import logger from "./middlewares/logger.js";
 import swagger from "./config/swagger/swagger.js";
 import loginRoutes from "./config/routes/loginRoutes.js";
 import usersRoutes from "./config/routes/usersRoutes.js";
@@ -11,7 +12,11 @@ import favoritesRoutes from "./config/routes/favoritesRoutes.js";
 import { errorController } from "./src/api/v1/controllers/errorController.js";
 import "dotenv/config";
 
-const PORT = process.env.PORT || 3000;
+let PORT = process.env.PORT || 3000;
+
+if (process.env.NODE_ENV == 'test') {
+    PORT = 0; //use a random port to avoid "listen EADDRINUSE: address already in use" with multiple test files
+}
 
 const app = express();
 
@@ -19,6 +24,7 @@ swagger(app);
 app.use(express.json());
 app.use(cors());
 // app.use(logger());
+app.use(logger);
 app.get("/", (req, res) => {
     res.send("✅ API online baby!");
 });
