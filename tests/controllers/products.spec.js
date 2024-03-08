@@ -18,7 +18,7 @@ describe('Products API', () => {
     describe('GET /products/:id', () => {
         it('Should return a product by id and have a status code of 200', async () => {
             await request(app)
-                .get('/api/v1/products/27') // Cambiar el id por uno existente en la base de datos
+                .get('/api/v1/products/1') // Cambiar el id por uno existente en la base de datos
                 .expect(200)
                 .then(response => {
                     expect(response.body).toHaveProperty('id_product');
@@ -87,7 +87,7 @@ describe('Products API', () => {
 
         it('Should return a 401 status code if the user is not authenticated', async () => {
             await request(app)
-                .delete('/api/v1/products/27') // Cambiar el id por uno existente en la base de datos
+                .delete('/api/v1/products/1') // Cambiar el id por uno existente en la base de datos
                 .expect(401);
         });
 
