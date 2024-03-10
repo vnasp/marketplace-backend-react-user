@@ -19,7 +19,7 @@ CREATE TABLE users (
     date_upd TIMESTAMP NOT NULL
 );
 
-CREATE TYPE category_enum AS ENUM ('Plantas', 'Manualidades', 'Música', 'Bienestar');
+CREATE TYPE category_enum AS ENUM ('Plantas', 'Manualidades', 'Musica', 'Bienestar');
 
 CREATE TABLE products (
     id_product SERIAL PRIMARY KEY,
@@ -135,7 +135,7 @@ VALUES (
     9990,
     'Descripción',
     'http://',
-    'Música',
+    'Musica',
     CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
 ),
 (
