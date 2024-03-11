@@ -5,6 +5,7 @@ import { productModel } from "../models/productModel.js";
 const getProducts = async (req, res) => {
     try {
         const products = await productModel.getProductsDB();
+        products.map(product => product.price = Number(product.price));
         res.json(products);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -19,6 +20,7 @@ const getProduct = async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
+        product.price = Number(product.price);
         res.json(product);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -35,6 +37,7 @@ const createProduct = async (req, res) => {
         const productData = { ...req.body, id_user }; // add id_user from token to product data
 
         const product = await productModel.createProductDB(productData);
+        product.price = Number(product.price);
         res.status(201).json(product);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -49,6 +52,7 @@ const deleteProduct = async (req, res) => {
         if (!deletedProduct) {
             return res.status(404).json({ message: "Product not found" });
         }
+        deletedProduct.price = Number(deletedProduct.price);
         res.json({
             message: "Product successfully removed",
             product: deletedProduct,
