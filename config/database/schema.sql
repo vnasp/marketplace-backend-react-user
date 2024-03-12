@@ -76,8 +76,3 @@ CREATE TABLE order_details (
         ON DELETE CASCADE,
     PRIMARY KEY (id_order, id_product)
 );
-
-SELECT setval('users_id_user_seq', 1);
-
-/* favorites */
-INSERT INTO favorites (id_user, id_product) VALUES (1, 1), (1, 2);
