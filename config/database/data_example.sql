@@ -67,3 +67,26 @@ INSERT INTO order_details (id_order, id_product, unit_price, product_quantity) V
 (9, 3, 8000, 1),
 (9, 18, 7000, 1),
 (10, 17, 22000, 1);
+
+/* Favorites */
+INSERT INTO favorites (id_user, id_product) VALUES
+(1, 1),
+(1, 11),
+(2, 2),
+(2, 12),
+(3, 3),
+(3, 13),
+(4, 4),
+(4, 14),
+(5, 5),
+(5, 15),
+(6, 6),
+(6, 16),
+(7, 7),
+(7, 17),
+(8, 8),
+(8, 18),
+(9, 9),
+(9, 19),
+(10, 10),
+(10, 20);
