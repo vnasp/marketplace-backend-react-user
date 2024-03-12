@@ -8,23 +8,26 @@ import { auth } from "../../middlewares/auth.js";
 
 const router = express.Router();
 
-// Routes
-// post and delete
-router.post("/favorites/:id", favoritesController.updateFavorites)
-router.delete("/favorites/:id", favoritesController.deleteFavorite)
-
-// este para agregar favoritos.El id del producto se pasa en el body
+// routes
+// adding favorite - private
 router.post(
-    "/favorites",
+    "/favorites/:id_user",
     auth.checkAuthentication,
-    favoritesController.addFavorite
+    favoritesController.addFavorites
 );
 
-// este para obtener los favoritos. El id de usuario viene del auth
+// getting user's favorites - private
 router.get(
-    "/favorites",
+    "/favorites/:id_user",
     auth.checkAuthentication,
-    favoritesController.getFavoritesByAuthUser
+    favoritesController.getFavoritesByUser
+);
+
+// deleting a favorite - private
+router.delete(
+    "/favorites/:id_user",
+    auth.checkAuthentication,
+    favoritesController.removeFavorites
 );
 
 export default router;

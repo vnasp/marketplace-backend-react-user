@@ -1,4 +1,7 @@
+// dotenv
 import "dotenv/config";
+
+// jwt
 import jwt from "jsonwebtoken";
 
 const checkAuthentication = (req, res, next) => {
@@ -13,8 +16,6 @@ const checkAuthentication = (req, res, next) => {
 
         //validate token
         req.auth = jwt.verify(token, process.env.JWT_SECRET || "az_AZ");
-        console.log(req.auth);
-        
         next();
     } catch (error) {
         res.locals.statusText = { error: `Token is invalid: ${error.message}` };

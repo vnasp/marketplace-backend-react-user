@@ -1,3 +1,10 @@
+DROP TABLE IF EXISTS order_details;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS favorites;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS users;
+DROP TYPE IF EXISTS category_enum;
+
 CREATE TABLE users (
     id_user SERIAL PRIMARY KEY,
     firstname VARCHAR(255) NOT NULL,
@@ -5,7 +12,7 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     address VARCHAR(255),
-    phone VARCHAR(20),
+    phone VARCHAR(255),
     avatar_url VARCHAR(255),
     id_user_google VARCHAR(255),
     date_add TIMESTAMP NOT NULL,
@@ -59,33 +66,13 @@ CREATE TABLE order_details (
     id_product INT NOT NULL,
     unit_price NUMERIC(10, 0) NOT NULL,
     product_quantity INT NOT NULL,
-    CONSTRAINT fk_orders_details_orders
+    CONSTRAINT fk_order_details_orders
         FOREIGN KEY(id_order) 
         REFERENCES orders(id_order)
         ON DELETE CASCADE,
-    CONSTRAINT fk_orders_details_products
+    CONSTRAINT fk_order_details_products
         FOREIGN KEY(id_product)
         REFERENCES products(id_product)
         ON DELETE CASCADE,
     PRIMARY KEY (id_order, id_product)
 );
-
-INSERT INTO users (
-    id_user,
-    firstname, lastname,
-    email, password,
-    address, phone,
-    avatar_url,
-    id_user_google,
-    date_add, date_upd)
-VALUES (
-    1,
-    'Jennifer', 'López',
-    'jlo@mimarketlatino.com', '$2a$10$DNYPeD41MsTKRkbe3zZtA.Nzd0SPokboIqyXmImlp8U9uqMwTV91G', /*1234*/
-    'Los Ángeles, California', '1234567890',
-    'https://media.tenor.com/5fZ3ujIk8WkAAAAe/jlo-mi.png',
-    NULL,
-    CURRENT_TIMESTAMP AT TIME ZONE 'UTC',
-    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
-);
-

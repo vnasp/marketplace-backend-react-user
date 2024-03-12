@@ -1,33 +1,47 @@
 import { favoriteModel } from "../models/favoriteModel.js";
 
-const addFavorite = async(req, res) => {};
-
-const getFavoritesByAuthUser = async(req,res) =>{};
-
-const deleteFavorite = async(req, res) => {};
-
-
-// Este es el PUT que debería pasarse a POST y DELETE
-const updateFavorites = async (req, res) => {
+// method: POST
+const addFavorites = async (req, res) => {
     try {
-        const { id_user } = req.params.id;
+        const { id_user } = req.auth;
         const { id_product } = req.body;
-        const isFavorite = await favoriteModel.existingFavorite(id_user, id_product);
-        if (isFavorite) {
-            await favoriteModel.removeFavorite(id_user, id_product);
-            return res
-                .status(200)
-                .json({ message: "Favorited removed successfully" });
-        } else {
-            await favoriteModel.addFavorite(id_user, id_product);
-            return res
-                .status(201)
-                .json({ message: "Favorite added successfully" });
-        }
+        await favoriteModel.addFavorite(id_user, id_product);
+        return res.status(201).json({ id_user, id_product });
     } catch (error) {
-        throw new Error("Error updating favorite: " + error.message);
+        res.locals.statusText = { error: `${error.message}` };
+        return res.status(500).json(res.locals.statusText);
     }
 };
 
-export const favoritesController = { updateFavorites, addFavorite, getFavoritesByAuthUser, deleteFavorite };
+// method: GET
+const getFavoritesByUser = async (req, res) => {
+    try {
+        const { id_user } = req.auth;
+        const favorites = await favoriteModel.getFavoriteByUser(id_user);
+        return res.status(200).json(favorites);
+    } catch (error) {
+        res.locals.statusText = { error: `${error.message}` };
+        return res.status(500).json(res.locals.statusText);
+    }
+};
 
+// method: DELETE
+const removeFavorites = async (req, res) => {
+    try {
+        const { id_user } = req.auth;
+        const { id_product } = req.body;
+        await favoriteModel.removeFavorite(id_user, id_product);
+        return res
+            .status(204)
+            .json({ message: "Favorite removed successfully" });
+    } catch (error) {
+        res.locals.statusText = { error: `${error.message}` };
+        return res.status(500).json(res.locals.statusText);
+    }
+};
+
+export const favoritesController = {
+    addFavorites,
+    getFavoritesByUser,
+    removeFavorites,
+};

@@ -1,53 +1,70 @@
+// model
 import { productModel } from "../models/productModel.js";
 
+// method: GET
 const getProducts = async (req, res) => {
     try {
         const products = await productModel.getProductsDB();
+        products.map(product => product.price = Number(product.price));
         res.json(products);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
+// method: GET
 const getProduct = async (req, res) => {
     try {
         const { id } = req.params;
         const product = await productModel.getProductDB(id);
         if (!product) {
-            return res.status(404).json({ message: 'Producto no encontrado' });
+            return res.status(404).json({ message: "Product not found" });
         }
+        product.price = Number(product.price);
         res.json(product);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
+// method: POST
 const createProduct = async (req, res) => {
     try {
-        // Obtiene id_user desde el JWT decodificado
+        // id_user from decoded JWT
         const id_user = req.auth.id_user;
 
-        // Incluye id_user en el objeto del producto a crear
-        const productData = { ...req.body, id_user }; // Agrega el id_user extraído del token a los datos del producto
+        // include id_user in product object to create product
+        const productData = { ...req.body, id_user }; // add id_user from token to product data
 
         const product = await productModel.createProductDB(productData);
+        product.price = Number(product.price);
         res.status(201).json(product);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
+// method: DELETE
 const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
         const deletedProduct = await productModel.deleteProductDB(id);
         if (!deletedProduct) {
-            return res.status(404).json({ message: 'Producto no encontrado' });
+            return res.status(404).json({ message: "Product not found" });
         }
-        res.json({ message: 'Producto eliminado con éxito', product: deletedProduct });
+        deletedProduct.price = Number(deletedProduct.price);
+        res.json({
+            message: "Product successfully removed",
+            product: deletedProduct,
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-export const productsController = { getProducts, getProduct, createProduct, deleteProduct };
+export const productsController = {
+    getProducts,
+    getProduct,
+    createProduct,
+    deleteProduct,
+};

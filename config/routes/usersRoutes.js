@@ -1,13 +1,29 @@
-import express from 'express';
+import express from "express";
+
+// auth middleware
 import { auth } from "../../middlewares/auth.js";
-import {usersController} from '../../src/api/v1/controllers/usersController.js';
+
+// controller
+import { usersController } from "../../src/api/v1/controllers/usersController.js";
 
 const router = express.Router();
 
-router.post('/users', usersController.createUser);
+// routes
+// creating user - public
+router.post("/users", usersController.createUser);
 
-router.get('/users/:id_user', auth.checkAuthentication, usersController.getUser);
+// getting users - private
+router.get(
+    "/users/:id_user",
+    auth.checkAuthentication,
+    usersController.getUser
+);
 
-router.put('/users/:id_user', auth.checkAuthentication, usersController.editUser);
+// editing user - private
+router.put(
+    "/users/:id_user",
+    auth.checkAuthentication,
+    usersController.editUser
+);
 
 export default router;

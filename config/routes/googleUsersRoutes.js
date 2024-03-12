@@ -1,26 +1,26 @@
-import { Router } from "express";
+import express from "express";
+
+// controller
 import {
     googleAuthController,
     googleAuthCallbackController,
     handleGoogleCallback,
 } from "../../src/api/v1/controllers/googleUsersController.js";
 
+// google auth
 import { authenticateWithGoogleToken } from "../../middlewares/googleAuth.js"
 
-const router = Router();
+const router = express.Router();
 
-router
-    .route("/google")
-    .get(googleAuthController)
-    .all((req, res, next) => {
-        res.status(405).json({ message: "Method not allowed" });
-    });
+// routes
 
-router
-    .route("/google/callback")
-    .get(authenticateWithGoogleToken, handleGoogleCallback)
-    .all((req, res, next) => {
-        res.status(405).json({ message: "Method not allowed" });
-    });
+// go to google page to logging or register in with google
+router.get("/google", googleAuthController);
+
+// after logging or register with google, redirect to certain pages with jwt created with the google token
+router.get("/google/callback", authenticateWithGoogleToken, googleAuthCallbackController);
+
+// manage callback 
+router.post("/google/callback", handleGoogleCallback);
 
 export default router;

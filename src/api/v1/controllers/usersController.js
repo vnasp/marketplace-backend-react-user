@@ -1,5 +1,7 @@
+// model
 import { userModel } from '../models/userModel.js';
 
+// method: POST
 const createUser = async(req, res) => {
     try {
         const { email } = req.body;
@@ -18,6 +20,7 @@ const createUser = async(req, res) => {
     }
 };
 
+// method: GET
 const getUser = async(req, res) => {
     try {
         const { id_user } = req.auth;
@@ -32,6 +35,7 @@ const getUser = async(req, res) => {
     }
 };
 
+// method: PUT
 const editUser = async(req, res) => {
     try {
         const { id_user } = req.auth;
