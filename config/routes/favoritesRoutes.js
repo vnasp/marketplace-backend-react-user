@@ -23,13 +23,6 @@ router.get(
     favoritesController.getFavoritesByUser
 );
 
-// editing user's favorites - private
-router.put(
-    "/favorites/:id_user",
-    auth.checkAuthentication,
-    favoritesController.updateFavorites
-);
-
 // deleting a favorite - private
 router.delete(
     "/favorites/:id_user",

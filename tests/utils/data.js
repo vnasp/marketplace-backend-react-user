@@ -32,7 +32,7 @@ const userGoogle = {
 };
 
 //categories
-const categories = ['Plantas', 'Manualidades', 'Música', 'Bienestar'];
+const categories = ['Plantas', 'Manualidades', 'Musica', 'Bienestar'];
 
 //products
 const productValid = {
