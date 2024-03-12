@@ -19,7 +19,7 @@ CREATE TABLE users (
     date_upd TIMESTAMP NOT NULL
 );
 
-CREATE TYPE category_enum AS ENUM ('Plantas', 'Manualidades', 'Musica', 'Bienestar');
+CREATE TYPE category_enum AS ENUM ('Plantas', 'Manualidades', 'Música', 'Bienestar');
 
 CREATE TABLE products (
     id_product SERIAL PRIMARY KEY,
@@ -77,105 +77,7 @@ CREATE TABLE order_details (
     PRIMARY KEY (id_order, id_product)
 );
 
-/* users */
-INSERT INTO users (
-    id_user,
-    firstname, lastname,
-    email, password,
-    address, phone,
-    avatar_url,
-    id_user_google,
-    date_add, date_upd)
-VALUES (
-    1,
-    'Jennifer', 'López',
-    'jlo@mimarketlatino.com', '$2a$10$DNYPeD41MsTKRkbe3zZtA.Nzd0SPokboIqyXmImlp8U9uqMwTV91G', /*1234*/
-    'Los Ángeles, California', '1234567890',
-    'https://media.tenor.com/5fZ3ujIk8WkAAAAe/jlo-mi.png',
-    NULL,
-    CURRENT_TIMESTAMP AT TIME ZONE 'UTC',
-    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
-);
 SELECT setval('users_id_user_seq', 1);
-
-/* products */
-INSERT INTO products (
-    id_product,
-    id_user,
-    name,
-    price,
-    description,
-    image_url,
-    category,
-    date_add)
-VALUES (
-    1,
-    1,
-    'Planta María Juana Kawaii Bordada',
-    9990,
-    'Lo mejor de cuatro mundos',
-    'https://i.pinimg.com/736x/be/d6/3f/bed63fbd3b545cd5e15e18caf1a89885.jpg',
-    'Plantas',
-    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
-),
-(
-    2,
-    1,
-    'Nombre',
-    9990,
-    'Descripción',
-    'http://',
-    'Manualidades',
-    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
-),
-(
-    3,
-    1,
-    'Nombre',
-    9990,
-    'Descripción',
-    'http://',
-    'Musica',
-    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
-),
-(
-    4,
-    1,
-    'Nombre',
-    9990,
-    'Descripción',
-    'http://',
-    'Bienestar',
-    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
-);
-SELECT setval('products_id_product_seq', 4);
 
 /* favorites */
 INSERT INTO favorites (id_user, id_product) VALUES (1, 1), (1, 2);
-
-/* orders */
-INSERT INTO orders (
-    id_order,
-    id_user,
-    total_price,
-    purchase_date
-) VALUES (
-    1,
-    1,
-    9990,
-    CURRENT_TIMESTAMP AT TIME ZONE 'UTC'
-);
-SELECT setval('orders_id_order_seq', 1);
-
-/* order_details */
-INSERT INTO order_details (
-    id_order,
-    id_product,
-    unit_price,
-    product_quantity
-) VALUES (
-    1,
-    1,
-    9990,
-    1
-);
