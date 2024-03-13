@@ -1,11 +1,11 @@
-import "dotenv/config";
+import Config from "../src/api/v1/utils/Config.js";
 import fs from "fs";
 
 const datetime_utc = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
 const options = {
-    mode       : process.env.LOGS_MODE || "console",
-    fileFolder : process.env.LOGS_FILE_PATH || "logs",
+    mode       : Config.get("LOGS_MODE"),
+    fileFolder : Config.get("LOGS_FILE_PATH"),
     fileName   : `${datetime_utc.slice(0, 10)}.log`
 };
 

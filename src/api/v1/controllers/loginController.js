@@ -1,3 +1,5 @@
+import Config from "../utils/Config.js";
+
 // bcript
 import bcript from "bcryptjs";
 
@@ -32,12 +34,12 @@ const login = async(req, res) => {
             return res.status(400).json(res.locals.statusText);
         }
 
-        const expiresIn      = Number(process.env.JWT_EXPIRES_IN_SECONDS) || 600;
+        const expiresIn      = Number(Config.get("JWT_EXPIRES_IN_SECONDS"));
         const expirationDate = new Date(Date.now() + expiresIn * 1000).toISOString().slice(0, 19).replace('T', ' ');
 
         const token = jwt.sign({
             id_user : user.id_user,
-        }, process.env.JWT_SECRET || "az_AZ", { expiresIn: expiresIn });
+        }, Config.get("JWT_SECRET"), { expiresIn: expiresIn });
     
         res.locals.statusText = {
             token,
