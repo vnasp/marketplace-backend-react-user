@@ -1,5 +1,8 @@
-import "dotenv/config";
+import Config from "../../src/api/v1/utils/Config.js";
+
+// jwt
 import jwt from "jsonwebtoken";
+
 import { faker } from "@faker-js/faker";
 
 //login
@@ -32,7 +35,7 @@ const userGoogle = {
 };
 
 //categories
-const categories = ['Plantas', 'Manualidades', 'Música', 'Bienestar'];
+const categories = ['Plantas', 'Manualidades', 'Musica', 'Bienestar'];
 
 //products
 const productValid = {
@@ -52,7 +55,7 @@ const productNew = {
 };
 
 const generateToken = () => {
-    return jwt.sign({ id_user: credentialsValid.id_user }, process.env.JWT_SECRET || "az_AZ", {
+    return jwt.sign({ id_user: credentialsValid.id_user }, Config.get("JWT_SECRET"), {
         expiresIn : "1m"
     });
 };

@@ -1,14 +1,14 @@
-import "dotenv/config";
+import Config from "../../src/api/v1/utils/Config.js";
 import pg from "pg";
 
 const pool = new pg.Pool({
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    port: process.env.DB_PORT,
-    //connectionString : process.env.DB_URL,
-    allowExitOnIdle: true,
+    host             : Config.get("DB_HOST"),
+    database         : Config.get("DB_NAME"),
+    user             : Config.get("DB_USER"),
+    password         : Config.get("DB_PASS"),
+    port             : Config.get("DB_PORT"),
+    //connectionString : Config.get("DB_URL"),
+    allowExitOnIdle  : true,
 });
 
 async function connectToDatabase() {
@@ -18,7 +18,7 @@ async function connectToDatabase() {
     } catch (error) {
         console.error("Error connecting to database:", error);
     }
-}
+};
 
 connectToDatabase();
 
