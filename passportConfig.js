@@ -1,5 +1,5 @@
 import passport from "passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20"; 
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { userModel } from "./src/api/v1/models/userModel.js";
 import dotenv from "dotenv";
 
@@ -11,10 +11,13 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: "/auth/google/callback"
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                const user = await userModel.findOne({ googleId: profile.id });
+                const user = await userModel.getUser({
+                    id_user_google: profile.id,
+                });
                 if (!user) {
                     return done(null, false, {
                         message: "Usuario no registrado",
