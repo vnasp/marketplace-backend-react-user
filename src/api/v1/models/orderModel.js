@@ -87,6 +87,7 @@ const getSells = async (id) => {
           orders.purchase_date,
           order_details.id_product,
           products.name AS product_name,
+          products.image_url,
           order_details.unit_price,
           order_details.product_quantity
       FROM orders
