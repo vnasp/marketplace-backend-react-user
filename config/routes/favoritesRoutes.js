@@ -13,21 +13,21 @@ const router = express.Router();
 router.post(
     "/favorites/:id_user",
     auth.checkAuthentication,
-    favoritesController.addFavorites
+    favoritesController.addFavorite
 );
 
 // getting user's favorites - private
 router.get(
     "/favorites/:id_user",
     auth.checkAuthentication,
-    favoritesController.getFavoritesByUser
+    favoritesController.getFavorites
 );
 
 // deleting a favorite - private
 router.delete(
     "/favorites/:id_user",
     auth.checkAuthentication,
-    favoritesController.removeFavorites
+    favoritesController.deleteFavorite
 );
 
 export default router;

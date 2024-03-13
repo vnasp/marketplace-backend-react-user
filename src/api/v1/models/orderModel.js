@@ -1,7 +1,7 @@
 import pool from "../../../../config/database/connection.js";
 
 // create order and order detail
-const createOrderDB = async (orderData) => {
+const createOrder = async (orderData) => {
     const { id_user, total_price, products } = orderData;
     if (total_price <= 0) {
         throw new Error("El monto total debe ser mayor que cero.");
@@ -125,4 +125,4 @@ const getSells = async (id) => {
   }
 };
 
-export const orderModel = { createOrderDB, getPurchases, getSells };
+export const orderModel = { createOrder, getPurchases, getSells };
