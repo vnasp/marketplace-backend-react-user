@@ -1,47 +1,84 @@
 import { favoriteModel } from "../models/favoriteModel.js";
+import { productModel } from "../models/productModel.js";
 
 // method: POST
-const addFavorites = async (req, res) => {
+const addFavorite = async (req, res) => {
+    let error;
+
     try {
         const { id_user } = req.auth;
         const { id_product } = req.body;
-        await favoriteModel.addFavorite(id_user, id_product);
-        return res.status(201).json({ id_user, id_product });
-    } catch (error) {
-        res.locals.statusText = { error: `${error.message}` };
-        return res.status(500).json(res.locals.statusText);
+
+        const product = await productModel.getProduct({ id_product });
+
+        if (!product) {
+            error = { error: "Product not found" };
+            res.locals.statusText = error;
+            return res.status(404).json(error);
+        }
+
+        const favoriteExists = await favoriteModel.getFavorite({ id_user, id_product });
+
+        if (favoriteExists) {
+            error = { error: "Favorite already exists" };
+            res.locals.statusText = error;
+            return res.status(400).json(error);
+        }
+        
+        const favorite = await favoriteModel.addFavorite({ id_user, id_product });
+        res.locals.statusText = favorite;
+        return res.status(201).json(favorite);
+    } catch (e) {
+        error = { error: `${e.message}` };
+        res.locals.statusText = error;
+        return res.status(500).json(error);
     }
 };
 
 // method: GET
-const getFavoritesByUser = async (req, res) => {
+const getFavorites = async (req, res) => {
+    let error;
+
     try {
         const { id_user } = req.auth;
-        const favorites = await favoriteModel.getFavoriteByUser(id_user);
+        const favorites = await favoriteModel.getFavorites({ id_user });
+        res.locals.statusText = favorites;
         return res.status(200).json(favorites);
-    } catch (error) {
-        res.locals.statusText = { error: `${error.message}` };
-        return res.status(500).json(res.locals.statusText);
+    } catch (e) {
+        error = { error: `${e.message}` };
+        res.locals.statusText = error;
+        return res.status(500).json(error);
     }
 };
 
 // method: DELETE
-const removeFavorites = async (req, res) => {
+const deleteFavorite = async (req, res) => {
+    let error;
+
     try {
         const { id_user } = req.auth;
         const { id_product } = req.body;
-        await favoriteModel.removeFavorite(id_user, id_product);
-        return res
-            .status(204)
-            .json({ message: "Favorite removed successfully" });
-    } catch (error) {
-        res.locals.statusText = { error: `${error.message}` };
-        return res.status(500).json(res.locals.statusText);
+
+        const favoriteExists = await favoriteModel.getFavorite({ id_user, id_product });
+
+        if (!favoriteExists) {
+            error = { error: "Favorite does not exist" };
+            res.locals.statusText = error;
+            return res.status(404).json(error);
+        }
+
+        const deleteFavorite = await favoriteModel.deleteFavorite({ id_user, id_product });
+        res.locals.statusText = deleteFavorite;
+        return res.status(200).json(deleteFavorite);
+    } catch (e) {
+        error = { error: `${e.message}` };
+        res.locals.statusText = error;
+        return res.status(500).json(error);
     }
 };
 
 export const favoritesController = {
-    addFavorites,
-    getFavoritesByUser,
-    removeFavorites,
+    addFavorite,
+    getFavorites,
+    deleteFavorite,
 };

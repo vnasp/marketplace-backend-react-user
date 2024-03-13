@@ -11,6 +11,8 @@ import { userModel } from '../models/userModel.js';
 
 
 const login = async(req, res) => {
+    let error;
+
     try {
         const { email, password } = req.body;
 
@@ -21,17 +23,21 @@ const login = async(req, res) => {
         const user = await userModel.getUser({ email });
 
         if (!user) {
-            res.locals.statusText = { error: "Email and/or password is invalid" };
-            //res.locals.statusText = { error: "User not found" };
-            return res.status(400).json(res.locals.statusText);
+            //We don't give back a cause in the feedback to avoid giving an attacker details
+            //error = { error: "User not found" };
+            error = { error: "Email and/or password is invalid" };
+            res.locals.statusText = error;
+            return res.status(400).json(error);
         }
       
         const passwordMatch = bcript.compareSync(password, user.password);
 
         if (!passwordMatch) {
-            res.locals.statusText = { error: "Email and/or password is invalid" };
-            //res.locals.statusText = { error: "Password is incorrect" };
-            return res.status(400).json(res.locals.statusText);
+            //We don't give back a cause in the feedback to avoid giving an attacker details
+            //error = { error: "Password is incorrect" };
+            error = { error: "Email and/or password is invalid" };
+            res.locals.statusText = error;
+            return res.status(400).json(error);
         }
 
         const expiresIn      = Number(Config.get("JWT_EXPIRES_IN_SECONDS"));
@@ -41,15 +47,18 @@ const login = async(req, res) => {
             id_user : user.id_user,
         }, Config.get("JWT_SECRET"), { expiresIn: expiresIn });
     
-        res.locals.statusText = {
+        const response = {
             token,
             expiresIn,
             expirationDate
         };
-        return res.status(200).json(res.locals.statusText);
-    } catch (error) {
-        res.locals.statusText = { error: `${error.message}` };
-        return res.status(500).json(res.locals.statusText);
+
+        res.locals.statusText = response;
+        return res.status(200).json(response);
+    } catch (e) {
+        error = { error: `${e.message}` };
+        res.locals.statusText = error;
+        return res.status(500).json(error);
     }
 };
 
