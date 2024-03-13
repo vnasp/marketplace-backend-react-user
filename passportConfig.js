@@ -29,15 +29,19 @@ passport.use(
     )
 );
 
-// Serialización y deserialización del usuario
+// Serialización del usuario
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+  done(null, user.id_user);
 });
 
-passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
-        done(err, user);
-    });
+// Deserialización del usuario
+passport.deserializeUser(async (id, done) => {
+  try {
+      const user = await userModel.getUser({ id_user: id });
+      done(null, user);
+  } catch (error) {
+      done(error);
+  }
 });
 
 export default passport;
