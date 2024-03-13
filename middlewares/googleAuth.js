@@ -1,35 +1,46 @@
-import Config from "../src/api/v1/utils/Config.js";
 import { OAuth2Client } from "google-auth-library";
-// jwt
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
-const client = new OAuth2Client(Config.get("GOOGLE_CLIENT_ID"));
+dotenv.config();
+
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const jwtSecret = process.env.JWT_SECRET;
+
+const client = new OAuth2Client(googleClientId);
 
 const authenticateWithGoogleToken = async (req, res, next) => {
     const { token } = req.body;
-    if (!googleToken) {
+
+    // Comprobar si se proporciona un token
+    if (!token) {
         return res.status(400).json({ error: "Google token is required" });
     }
+
     try {
-        // verify token with google client
+        // Verificar el token con el cliente de Google
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: Config.get("GOOGLE_CLIENT_ID"),
+            audience: googleClientId, // Utiliza el ID del cliente de Google desde el archivo .env
         });
         const payload = ticket.getPayload();
 
-        // generate jwt with payload information
-        const jwtToken = jwt.sign(payload, Config.get("JWT_SECRET"), {
+        // Generar un token JWT con la información del payload
+        const jwtToken = jwt.sign(payload, jwtSecret, {
             expiresIn: "1h",
         });
-        req.jwtToken = jwtToken;
-        res.send({ payload, isSuccess: true });
-        next();
+
+        // Enviar la respuesta con el token JWT generado
+        res.json({ token: jwtToken, isSuccess: true });
     } catch (error) {
+        // Manejar errores
+        console.error("Error verifying Google token:", error);
         return res
             .status(401)
-            .json({ error: `Authentication failed: ${error.message}` })
-            .send({ payload: {}, isSuccess: false });
+            .json({
+                error: `Authentication failed: ${error.message}`,
+                isSuccess: false,
+            });
     }
 };
 

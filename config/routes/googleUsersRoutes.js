@@ -1,26 +1,23 @@
 import express from "express";
+import passport from "passport";
 
-// controller
+// Controller
 import {
-    googleAuthController,
     googleAuthCallbackController,
     handleGoogleCallback,
 } from "../../src/api/v1/controllers/googleUsersController.js";
 
-// google auth
-import { authenticateWithGoogleToken } from "../../middlewares/googleAuth.js"
-
 const router = express.Router();
 
-// routes
+// Routes
 
-// go to google page to logging or register in with google
-router.get("/google", googleAuthController);
+// Ir a la página de Google para iniciar sesión o registrarse con Google
+router.get("/google", passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-// after logging or register with google, redirect to certain pages with jwt created with the google token
-router.get("/google/callback", authenticateWithGoogleToken, googleAuthCallbackController);
+// Después de iniciar sesión o registrarse con Google, redirigir a ciertas páginas con el JWT creado con el token de Google
+router.get("/google/callback", passport.authenticate('google', { failureRedirect: '/login' }), googleAuthCallbackController);
 
-// manage callback 
+// Manejar la devolución de llamada
 router.post("/google/callback", handleGoogleCallback);
 
 export default router;
