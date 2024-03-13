@@ -1,12 +1,9 @@
+import Config from "../src/api/v1/utils/Config.js";
 import { OAuth2Client } from "google-auth-library";
-
 // jwt
 import jwt from "jsonwebtoken";
 
-// dotenv
-import "dotenv/config";
-
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(Config.get("GOOGLE_CLIENT_ID"));
 
 const authenticateWithGoogleToken = async (req, res, next) => {
     const { token } = req.body;
@@ -17,12 +14,12 @@ const authenticateWithGoogleToken = async (req, res, next) => {
         // verify token with google client
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            audience: Config.get("GOOGLE_CLIENT_ID"),
         });
         const payload = ticket.getPayload();
 
         // generate jwt with payload information
-        const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, {
+        const jwtToken = jwt.sign(payload, Config.get("JWT_SECRET"), {
             expiresIn: "1h",
         });
         req.jwtToken = jwtToken;
