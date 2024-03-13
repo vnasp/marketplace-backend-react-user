@@ -20,25 +20,29 @@ const handleGoogleCallback = async (req, res, next) => {
             return res.status(401).json({ error: "Authentication failed" });
         }
         try {
-            const userExists = await userModel.getUser({
-                email: profile.emails[0]?.value,
+            // Buscar si el usuario ya existe en la base de datos
+            const existingUser = await userModel.findOne({
+                googleId: profile.id,
             });
-            if (userExists) {
-                res.locals.statusText = { error: "User already exists" };
-                return res.status(400).json(res.locals.statusText);
+            if (existingUser) {
+                // El usuario ya existe, enviar un mensaje de error
+                return res.status(400).json({ error: "User already exists" });
+            } else {
+                // El usuario no existe, crear uno nuevo
+                const newUser = {
+                    firstname: profile.name.givenName,
+                    lastname: profile.name.familyName,
+                    email: profile.emails[0].value,
+                    password: "", // Asumiendo que no se necesita una contraseña para el inicio de sesión con Google
+                    address: "",
+                    phone: "",
+                    avatar_url: profile.photos[0].value,
+                    googleId: profile.id,
+                };
+                const createdUser = await userModel.create(newUser);
+                // Enviar una respuesta exitosa con el usuario creado
+                return res.status(201).json(createdUser);
             }
-            const createdUser = await userModel.createUser({
-                firstname: profile.name.givenName,
-                lastname: profile.name.familyName,
-                email: profile.emails[0].value,
-                password: "",
-                address: "",
-                phone: "",
-                avatar_url: profile.photos[0].value,
-                id_user_google: profile.id,
-            });
-            // Envía la respuesta solo después de crear el usuario exitosamente
-            return res.status(201).json(createdUser);
         } catch (error) {
             console.error("Error creating user:", error);
             return res.status(500).json({ error: "Failed to create user" });
@@ -46,7 +50,4 @@ const handleGoogleCallback = async (req, res, next) => {
     })(req, res, next);
 };
 
-export {
-    googleAuthCallbackController,
-    handleGoogleCallback,
-};
+export { googleAuthCallbackController, handleGoogleCallback };

@@ -20,4 +20,10 @@ router.get("/google/callback", passport.authenticate('google', { failureRedirect
 // Manejar la devolución de llamada
 router.post("/google/callback", handleGoogleCallback);
 
+// Ruta para iniciar sesión con Google
+router.post("/auth/google/login", passport.authenticate('google'), googleAuthCallbackController);
+
+// Ruta para registrar con Google
+router.post("/auth/google/register", handleGoogleCallback);
+
 export default router;
