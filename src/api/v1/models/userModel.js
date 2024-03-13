@@ -4,18 +4,23 @@ import pool from "../../../../config/database/connection.js";
 import bcript from "bcryptjs";
 
 // get user
-const getUser = async ({ id_user, email, id_user_diff }) => {
+const getUser = async ({ id_user, email, id_user_diff, id_user_google }) => {
     if (!id_user && !email) {
         throw new Error("Required parameters are missing.");
     }
 
-    const user = await getUsers({ id_user, email, id_user_diff });
+    const user = await getUsers({
+        id_user,
+        email,
+        id_user_diff,
+        id_user_google,
+    });
 
     return user ? user[0] : false;
 };
 
 // get users
-const getUsers = async ({ id_user, email, id_user_diff }) => {
+const getUsers = async ({ id_user, email, id_user_diff, id_user_google }) => {
     try {
         const where = [];
         const values = [];
@@ -49,6 +54,11 @@ const getUsers = async ({ id_user, email, id_user_diff }) => {
         if (id_user_diff) {
             where.push(`(users.id_user != $${values.length + 1})`);
             values.push(id_user_diff);
+        }
+
+        if (id_user_google) {
+            where.push(`(users.id_user_google != $${values.length + 1})`);
+            values.push(id_user_google);
         }
 
         if (where.length) {

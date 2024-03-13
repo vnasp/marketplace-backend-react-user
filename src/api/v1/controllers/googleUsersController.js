@@ -14,8 +14,8 @@ const handleGoogleCallback = async (req, res, next) => {
         }
         try {
             // Buscar si el usuario ya existe en la base de datos
-            const existingUser = await userModel.findOne({
-                googleId: profile.id,
+            const existingUser = await userModel.getUser({
+                id_user_google: profile.id,
             });
             if (existingUser) {
                 res.locals.statusText = { error: "User already exists" };
@@ -26,11 +26,11 @@ const handleGoogleCallback = async (req, res, next) => {
                     firstname: profile.name.givenName,
                     lastname: profile.name.familyName,
                     email: profile.emails[0].value,
-                    password: "",
+                    password: "-",
                     address: "",
                     phone: "",
                     avatar_url: profile.photos[0].value,
-                    googleId: profile.id,
+                    id_user_google: profile.id,
                 };
                 const createdUser = await userModel.createUser(newUser);
                 // Enviar una respuesta exitosa con el usuario creado
