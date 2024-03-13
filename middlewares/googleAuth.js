@@ -1,11 +1,9 @@
+import Config from "../src/api/v1/utils/Config.js";
 import { OAuth2Client } from "google-auth-library";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 
-dotenv.config();
-
-const googleClientId = process.env.GOOGLE_CLIENT_ID;
-const jwtSecret = process.env.JWT_SECRET;
+const googleClientId = Config.get("GOOGLE_CLIENT_ID");
+const jwtSecret = Config.get("JWT_SECRET");
 
 const client = new OAuth2Client(googleClientId);
 
