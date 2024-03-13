@@ -54,6 +54,7 @@ const getPurchases = async (id) => {
           orders.purchase_date,
           products.id_product,
           products.name AS product_name,
+          products.image_url,
           order_details.unit_price,
           order_details.product_quantity
       FROM orders
