@@ -22,8 +22,7 @@ class Config
             JWT_SECRET             : process.env.JWT_SECRET || "az_AZ",
             JWT_EXPIRES_IN_SECONDS : process.env.JWT_EXPIRES_IN_SECONDS || 600,
 
-            GOOGLE_CLIENT_ID     : process.env.GOOGLE_CLIENT_ID,
-            GOOGLE_CLIENT_SECRET : process.env.GOOGLE_CLIENT_SECRET
+            GOOGLE_CLIENT_ID : process.env.GOOGLE_CLIENT_ID
         };
   
         return config[key] || null;

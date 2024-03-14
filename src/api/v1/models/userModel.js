@@ -1,11 +1,39 @@
+import Config from "../utils/Config.js";
+
 import pool from "../../../../config/database/connection.js";
+
+// jwt
+import jwt from "jsonwebtoken";
 
 // bcript
 import bcript from "bcryptjs";
 
+const createToken = (user) => {
+    if (!user) {
+        throw new Error("Required parameters are missing.");
+    }
+    
+    try {
+        const expiresIn      = Number(Config.get("JWT_EXPIRES_IN_SECONDS"));
+        const expirationDate = new Date(Date.now() + expiresIn * 1000).toISOString().slice(0, 19).replace('T', ' ');
+
+        const token = jwt.sign({
+            id_user : user.id_user,
+        }, Config.get("JWT_SECRET"), { expiresIn: expiresIn });
+
+        return {
+            token,
+            expiresIn,
+            expirationDate
+        };
+    } catch (error) {
+        throw new Error(error.message);
+    }    
+};
+
 // get user
 const getUser = async ({ id_user, email, id_user_diff, id_user_google }) => {
-    if (!id_user && !email) {
+    if (!id_user && !email && !id_user_google) {
         throw new Error("Required parameters are missing.");
     }
 
@@ -57,7 +85,7 @@ const getUsers = async ({ id_user, email, id_user_diff, id_user_google }) => {
         }
 
         if (id_user_google) {
-            where.push(`(users.id_user_google != $${values.length + 1})`);
+            where.push(`(users.id_user_google = $${values.length + 1})`);
             values.push(id_user_google);
         }
 
@@ -205,76 +233,4 @@ const editUser = async ({
     }
 };
 
-export const userModel = { getUser, getUsers, createUser, editUser };
-
-/*
-request
-id_user | email
-
-response
-{
-  "firstname": "Amanda",
-  "lastname": "Fuentes",
-  "email": "amanda.fuentes@example.com",
-  "password": "password",
-  "address": "Avenida del Sol 1258",
-  "phone": "56912345678",
-  "avatar": "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
-  "id_user_google": 1,
-  "date_add": "2024-02-14T16:00:00.000Z",
-  "date_upd": "2024-02-14T16:00:00.000Z"
-}
- */
-
-/*
-request
-{
-  "user": {
-    "firstname": "Amanda",
-    "lastname": "Fuentes",
-    "email": "amanda.fuentes@example.com",
-    "password": "password",
-    "address": "Avenida del Sol 1258",
-    "phone": "56912345678",
-    "avatar": "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
-    "id_user_google": 1,
-    "date_add": "2024-02-14T16:00:00.000Z",
-    "date_upd": "2024-02-14T16:00:00.000Z"
-  }
-}
-
-response
-{
-  "firstname": "Amanda",
-  "lastname": "Fuentes",
-  "email": "amanda.fuentes@example.com",
-  "password": "password",
-  "address": "Avenida del Sol 1258",
-  "phone": "56912345678",
-  "avatar": "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
-  "id_user_google": 1,
-  "date_add": "2024-02-14T16:00:00.000Z",
-  "date_upd": "2024-02-14T16:00:00.000Z"
-}
-*/
-
-/*
-::editUser()
-
-request
-id_user
-
-response
-{
-  "firstname": "Amanda",
-  "lastname": "Fuentes",
-  "email": "amanda.fuentes@example.com",
-  "password": "password",
-  "address": "Avenida del Sol 1258",
-  "phone": "56912345678",
-  "avatar": "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
-  "id_user_google": 1,
-  "date_add": "2024-02-14T16:00:00.000Z",
-  "date_upd": "2024-02-14T16:00:00.000Z"
-}
-*/
+export const userModel = { getUser, getUsers, createUser, editUser, createToken };

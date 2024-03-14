@@ -1,14 +1,8 @@
-import Config from "../utils/Config.js";
-
 // bcript
 import bcript from "bcryptjs";
 
-// jwt
-import jwt from "jsonwebtoken";
-
 // model
 import { userModel } from '../models/userModel.js';
-
 
 const login = async(req, res) => {
     let error;
@@ -40,21 +34,10 @@ const login = async(req, res) => {
             return res.status(400).json(error);
         }
 
-        const expiresIn      = Number(Config.get("JWT_EXPIRES_IN_SECONDS"));
-        const expirationDate = new Date(Date.now() + expiresIn * 1000).toISOString().slice(0, 19).replace('T', ' ');
+        const token = userModel.createToken(user);
 
-        const token = jwt.sign({
-            id_user : user.id_user,
-        }, Config.get("JWT_SECRET"), { expiresIn: expiresIn });
-    
-        const response = {
-            token,
-            expiresIn,
-            expirationDate
-        };
-
-        res.locals.statusText = response;
-        return res.status(200).json(response);
+        res.locals.statusText = token;
+        return res.status(200).json(token);
     } catch (e) {
         error = { error: `${e.message}` };
         res.locals.statusText = error;
@@ -62,4 +45,38 @@ const login = async(req, res) => {
     }
 };
 
-export const loginController = { login };
+const loginWithGoogle = async(req, res) => {
+    let error;
+
+    try {
+        const { sub, email, given_name, family_name, picture } = req.auth;
+
+        if (!sub) {
+            throw new Error("Required parameters are missing.");
+        }
+    
+        const user = await userModel.getUser({ id_user_google : sub });
+
+        if (!user) {
+            user = await userModel.createUser({
+                firstname      : given_name,
+                lastname       : family_name,
+                email          : email,
+                password       : "-",
+                avatar_url     : picture,
+                id_user_google : sub
+            });
+        }
+
+        const token = userModel.createToken(user);
+
+        res.locals.statusText = token;
+        return res.status(200).json(token);
+    } catch (e) {
+        error = { error: `${e.message}` };
+        res.locals.statusText = error;
+        return res.status(500).json(error);
+    }
+};
+
+export const loginController = { login, loginWithGoogle };
