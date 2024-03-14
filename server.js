@@ -34,14 +34,6 @@ app.use(express.json());
 app.use(cors());
 // app.use(logger());
 app.use(logger);
-app.get(
-    "/auth/google",
-    passport.authenticate("google", { scope: ["profile", "email"] })
-);
-app.get(
-    "/auth/google/callback",
-    passport.authenticate("google", { failureRedirect: "/login" })
-);
 app.get("/", (req, res) => {
     res.send(`✅ API online baby v${Config.get("VERSION")}`);
 });
