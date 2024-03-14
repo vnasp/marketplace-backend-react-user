@@ -5,12 +5,10 @@ import cors from "cors";
 // import { logger } from 'logger-express';
 import logger from "./middlewares/logger.js";
 import swagger from "./config/swagger/swagger.js";
-import passport from "./passportConfig.js";
 
 // routes
 import loginRoutes from "./config/routes/loginRoutes.js";
 import usersRoutes from "./config/routes/usersRoutes.js";
-import googleUserRoutes from "./config/routes/googleUsersRoutes.js";
 import productsRoutes from "./config/routes/productsRoutes.js";
 import ordersRoutes from "./config/routes/ordersRoutes.js";
 import favoritesRoutes from "./config/routes/favoritesRoutes.js";
@@ -27,8 +25,6 @@ if (Config.get("ENVIRONMENT") == "test") {
 
 const app = express();
 
-app.use(passport.initialize());
-
 swagger(app);
 app.use(express.json());
 app.use(cors());
@@ -39,7 +35,6 @@ app.get("/", (req, res) => {
 });
 app.use("/api/v1", loginRoutes);
 app.use("/api/v1", usersRoutes);
-app.use("/api/v1", googleUserRoutes);
 app.use("/api/v1", productsRoutes);
 app.use("/api/v1", ordersRoutes);
 app.use("/api/v1", favoritesRoutes);

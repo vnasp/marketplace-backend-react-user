@@ -12,7 +12,7 @@ const createUser = async(req, res) => {
         if (userExists) {
             error = { error: "User already exists" };
             res.locals.statusText = error;
-            return res.status(400).json(error);
+            return res.status(409).json(error);
         }
 
         const user = await userModel.createUser(req.body);
