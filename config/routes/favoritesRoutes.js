@@ -25,7 +25,7 @@ router.get(
 
 // deleting a favorite - private
 router.delete(
-    "/favorites/:id_user",
+    "/favorites/:id_product",
     auth.checkAuthentication,
     favoritesController.deleteFavorite
 );
