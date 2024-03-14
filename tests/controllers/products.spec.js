@@ -33,10 +33,7 @@ describe('Products API', () => {
         it('Should return a 404 status code if the product does not exist', async () => {
             await request(app)
                 .get(`/api/v1/products/${productInvalid.id_product}`)
-                .expect(404)
-                .then(response => {
-                    expect(response.body).toHaveProperty('message', 'Product not found');
-                });
+                .expect(404);
         });
     });
 

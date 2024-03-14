@@ -1,7 +1,8 @@
 
 const error404 = async(req, res) => {
-    res.locals.statusText = { error: "Resource not found" };
-    res.status(404).json(res.locals.statusText);
+    let error = { error: "Resource not found" };
+    res.locals.statusText = error;
+    res.status(404).json(error);
 };
 
 export const errorController = { error404 };

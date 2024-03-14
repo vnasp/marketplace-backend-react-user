@@ -1,4 +1,4 @@
-import Config from './src/api/v1/utils/Config.js';
+import Config from "./src/api/v1/utils/Config.js";
 import express from "express";
 import cors from "cors";
 // logger-express is incompatible with tests, it is necessary to comment on it
@@ -9,7 +9,6 @@ import swagger from "./config/swagger/swagger.js";
 // routes
 import loginRoutes from "./config/routes/loginRoutes.js";
 import usersRoutes from "./config/routes/usersRoutes.js";
-import googleUserRoutes from "./config/routes/googleUsersRoutes.js";
 import productsRoutes from "./config/routes/productsRoutes.js";
 import ordersRoutes from "./config/routes/ordersRoutes.js";
 import favoritesRoutes from "./config/routes/favoritesRoutes.js";
@@ -36,7 +35,6 @@ app.get("/", (req, res) => {
 });
 app.use("/api/v1", loginRoutes);
 app.use("/api/v1", usersRoutes);
-app.use("/api/v1", googleUserRoutes);
 app.use("/api/v1", productsRoutes);
 app.use("/api/v1", ordersRoutes);
 app.use("/api/v1", favoritesRoutes);
@@ -44,8 +42,12 @@ app.use("*", errorController.error404);
 
 app.listen(PORT, () => {
     console.log(`App listening at http://localhost:${PORT}`);
-    console.log(`Swagger docs available at http://localhost:${PORT}/api/v1/docs`);
-    console.log(`Swagger production docs available at https://marketplace-backend-react-user-xwj0.onrender.com/api/v1/docs`);
+    console.log(
+        `Swagger docs available at http://localhost:${PORT}/api/v1/docs`
+    );
+    console.log(
+        `Swagger production docs available at https://marketplace-backend-react-user-xwj0.onrender.com/api/v1/docs`
+    );
 });
 
 export default app;

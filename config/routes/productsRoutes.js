@@ -21,7 +21,7 @@ const productCreationValidation = [
   
   // for product id in URL
   const productIdValidation = [
-    param('id').isInt().withMessage('The product ID must be an integer')
+    param('id_product').isInt().withMessage('The product ID must be an integer')
   ];
   
   // middleware to handle validation errors
@@ -38,13 +38,13 @@ const productCreationValidation = [
 // getting products - public
 router.get('/products', productsController.getProducts);
 
-// getting product detail by id - public
-router.get('/products/:id', productIdValidation, handleValidationErrors, productsController.getProduct);
+// getting product detail by id_product - public
+router.get('/products/:id_product', productIdValidation, handleValidationErrors, productsController.getProduct);
 
 // product creation - private
 router.post('/products', auth.checkAuthentication, productCreationValidation, handleValidationErrors, productsController.createProduct);
 
-// deleting product by id - private
-router.delete('/products/:id', auth.checkAuthentication, productIdValidation, handleValidationErrors, productsController.deleteProduct);
+// deleting product by id_product - private
+router.delete('/products/:id_product', auth.checkAuthentication, productIdValidation, handleValidationErrors, productsController.deleteProduct);
 
 export default router;

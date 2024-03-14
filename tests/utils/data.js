@@ -29,11 +29,6 @@ const userEdit = {
     phone: faker.phone.number()
 };
 
-const userGoogle = {
-    email    : "mimarketlatino@gmail.com",
-    password : "migentelatino"
-};
-
 //categories
 const categories = ['Plantas', 'Manualidades', 'Musica', 'Bienestar'];
 
@@ -62,7 +57,7 @@ const generateToken = () => {
 
 export { 
     credentialsValid, credentialsInvalid, 
-    userNew, userEdit, userGoogle,
+    userNew, userEdit,
     productValid, productInvalid, productNew,
     generateToken
 };
