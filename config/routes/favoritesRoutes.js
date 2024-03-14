@@ -11,7 +11,7 @@ const router = express.Router();
 // routes
 // adding favorite - private
 router.post(
-    "/favorites/:id_user",
+    "/favorites",
     auth.checkAuthentication,
     favoritesController.addFavorite
 );
