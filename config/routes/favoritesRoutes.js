@@ -18,7 +18,7 @@ router.post(
 
 // getting user's favorites - private
 router.get(
-    "/favorites/:id_user",
+    "/favorites",
     auth.checkAuthentication,
     favoritesController.getFavorites
 );
