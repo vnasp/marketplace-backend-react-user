@@ -57,7 +57,7 @@ const deleteFavorite = async (req, res) => {
 
     try {
         const { id_user } = req.auth;
-        const { id_product } = req.body;
+        const { id_product } = req.params;
 
         const favoriteExists = await favoriteModel.getFavorite({ id_user, id_product });
 
