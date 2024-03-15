@@ -1,6 +1,6 @@
 # Mi Market Latino 🛍️
 
-Este proeycto es un **marketplace** desarrollado como parte del proyecto final del bootcamp Full Stack Javascript G37 de **DesafioLATAM**. La aplicación permite a los usuarios navegar por distintas categorías de productos, añadir productos a favoritos, gestionar un carrito de compras y realizar compras. También incluye una sección de perfil de usuario donde se pueden ver el historial de órdenes de compras y ventas, gestionar productos favoritos y actualizar los datos del usuario.
+Este proyecto es un **marketplace** desarrollado como parte del proyecto final del bootcamp Full Stack Javascript G37 de **DesafioLATAM**. La aplicación permite a los usuarios navegar por distintas categorías de productos, añadir productos a favoritos, gestionar un carrito de compras y realizar compras. También incluye una sección de perfil de usuario donde se pueden ver el historial de órdenes de compras y ventas, gestionar productos favoritos y actualizar los datos del usuario.
 
 Este proyecto constituye el backend del marketplace, desarrollado con NodeJS y PostgreSQL, ofreciendo una API REST para el manejo de datos y operaciones del marketplace.
 
