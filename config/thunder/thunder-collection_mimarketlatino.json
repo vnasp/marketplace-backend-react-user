@@ -250,7 +250,7 @@
             "colId": "16d9c342-6f67-49a5-a100-4a1e5f5f204e",
             "containerId": "16f0cdc3-5f37-4659-a351-edb5ba200fbb",
             "name": "getFavorites",
-            "url": "http://localhost:3000/api/v1/favorites/1",
+            "url": "http://localhost:3000/api/v1/favorites",
             "method": "GET",
             "sortNum": 140000,
             "created": "2024-03-13T20:23:03.539Z",
