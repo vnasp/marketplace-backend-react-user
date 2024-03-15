@@ -11,21 +11,21 @@ const router = express.Router();
 // routes
 // adding favorite - private
 router.post(
-    "/favorites/:id_user",
+    "/favorites",
     auth.checkAuthentication,
     favoritesController.addFavorite
 );
 
 // getting user's favorites - private
 router.get(
-    "/favorites/:id_user",
+    "/favorites",
     auth.checkAuthentication,
     favoritesController.getFavorites
 );
 
 // deleting a favorite - private
 router.delete(
-    "/favorites/:id_user",
+    "/favorites/:id_product",
     auth.checkAuthentication,
     favoritesController.deleteFavorite
 );
