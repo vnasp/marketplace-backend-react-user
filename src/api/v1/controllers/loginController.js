@@ -58,6 +58,15 @@ const loginWithGoogle = async(req, res) => {
         const user = await userModel.getUser({ id_user_google : sub });
 
         if (!user) {
+            //register
+            const userExists = await userModel.getUser({ email });
+
+            if (userExists) {
+                error = { error: "User already exists" };
+                res.locals.statusText = error;
+                return res.status(409).json(error);
+            }
+    
             user = await userModel.createUser({
                 firstname      : given_name,
                 lastname       : family_name,
