@@ -55,7 +55,7 @@ const loginWithGoogle = async(req, res) => {
             throw new Error("Required parameters are missing.");
         }
     
-        const user = await userModel.getUser({ id_user_google : sub });
+        let user = await userModel.getUser({ id_user_google : sub });
 
         if (!user) {
             //register
