@@ -71,7 +71,7 @@ const loginWithGoogle = async(req, res) => {
                 firstname      : given_name,
                 lastname       : family_name,
                 email          : email,
-                password       : "-",
+                password_raw   : "-",
                 avatar_url     : picture,
                 id_user_google : sub
             });

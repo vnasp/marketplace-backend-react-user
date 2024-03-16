@@ -107,12 +107,13 @@ const createUser = async ({
     lastname,
     email,
     password,
+    password_raw,
     address,
     phone,
     avatar_url,
     id_user_google,
 }) => {
-    if (!firstname || !lastname || !email || !password) {
+    if (!firstname || !lastname || !email || (!password && !password_raw)) {
         throw new Error("Required parameters are missing.");
     }
 
@@ -133,7 +134,7 @@ const createUser = async ({
             firstname,
             lastname,
             email,
-            bcript.hashSync(password),
+            password ? bcript.hashSync(password) : password_raw,
             address,
             phone,
             avatar_url,
